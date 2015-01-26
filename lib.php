@@ -56,9 +56,9 @@ function getcontrol() {
 function opendb() { // Open database connection.
 
     include('config.php');
-    extract($dbsettings);
-    $link = mysql_connect($server, $user, $pass) or die(mysql_error());
-    mysql_select_db($name) or die(mysql_error());
+
+    $link = mysql_connect($dbsettings["server"], $dbsettings["user"], $dbsettings["pass"]) or die(mysql_error());
+    mysql_select_db($dbsettings["name"]) or die(mysql_error());
     return $link;
 
 }
