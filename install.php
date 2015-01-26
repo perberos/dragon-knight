@@ -746,20 +746,19 @@ die();
 
 function fourth() { // Final page: insert new user row, congratulate the person on a job well done.
 
-    extract($_POST);
-    if (!isset($username)) { die("Username is required."); }
-    if (!isset($password1)) { die("Password is required."); }
-    if (!isset($password2)) { die("Verify Password is required."); }
-    if ($password1 != $password2) { die("Passwords don't match."); }
-    if (!isset($email1)) { die("Email is required."); }
-    if (!isset($email2)) { die("Verify Email is required."); }
-    if ($email1 != $email2) { die("Emails don't match."); }
-    if (!isset($charname)) { die("Character Name is required."); }
-    $password = md5($password1);
+    if (!isset($_POST['username'])) { die("Username is required."); }
+    if (!isset($_POST['password1'])) { die("Password is required."); }
+    if (!isset($_POST['password2'])) { die("Verify Password is required."); }
+    if ($_POST['password1'] != $_POST['password2']) { die("Passwords don't match."); }
+    if (!isset($_POST['email1'])) { die("Email is required."); }
+    if (!isset($_POST['email2'])) { die("Verify Email is required."); }
+    if ($_POST['email1'] != $_POST['email2']) { die("Emails don't match."); }
+    if (!isset($_POST['charname'])) { die("Character Name is required."); }
+    $password = md5($_POST['password1']);
 
     global $dbsettings;
     $users = $dbsettings["prefix"] . "_users";
-    $query = mysql_query("INSERT INTO $users SET id='1',username='$username',password='$password',email='$email1',verify='1',charname='$charname',charclass='$charclass',regdate=NOW(),onlinetime=NOW(),authlevel='1'") or die(mysql_error());
+    $query = mysql_query("INSERT INTO $users SET id='1',username='".mysql_escape_string ($_POST["username"]) ."',password='".mysql_escape_string ($password) ."',email='".mysql_escape_string ($_POST["email1"]) ."',verify='1',charname='".mysql_escape_string ($_POST["charname"]) ."',charclass='".mysql_escape_string ($_POST["charclass"]) ."',regdate=NOW(),onlinetime=NOW(),authlevel='1'") or die(mysql_error());
 
 $page = <<<END
 <html>
