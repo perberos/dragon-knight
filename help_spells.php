@@ -87,7 +87,13 @@ while ($itemsrow = mysql_fetch_array($itemsquery)) {
     elseif ($itemsrow["type"] == 3) { $type = "Sleep"; }
     elseif ($itemsrow["type"] == 4) { $type = "+Damage (%)"; }
     elseif ($itemsrow["type"] == 5) { $type = "+Defense (%)"; }
-    echo "<tr><td $color width=\"25%\">".$itemsrow["name"]."</td><td $color width=\"25%\">".$itemsrow["mp"]."</td><td $color width=\"25%\">$type</td><td $color width=\"25%\">".$itemsrow["attribute"]."</td></tr>\n";
+
+    ?><tr>
+		<td <?php print ($color); ?> width="25%"><?php print ($itemsrow["name"]); ?></td>
+		<td <?php print ($color); ?> width="25%"><?php print ($itemsrow["mp"]); ?></td>
+		<td <?php print ($color); ?> width="25%"><?php print ($type); ?></td>
+		<td <?php print ($color); ?> width="25%"><?php print ($itemsrow["attribute"]); ?></td>
+	</tr><?php
 }
 ?>
 </table>
