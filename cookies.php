@@ -11,7 +11,7 @@ function checkcookies() {
         // COOKIE FORMAT:
         // {ID} {USERNAME} {PASSWORDHASH} {REMEMBERME}
         $theuser = explode(" ",$_COOKIE["dkgame"]);
-        $query = doquery("SELECT * FROM {{table}} WHERE username='$theuser[1]'", "users");
+        $query = doquery("SELECT * FROM {{table}} WHERE username='". mysql_escape_string ($theuser[1]) ."'", "users");
         if (mysql_num_rows($query) != 1) { die("Invalid cookie data (Error 1). Please clear cookies and log in again."); }
         $row = mysql_fetch_array($query);
         if ($row["id"] != $theuser[0]) { die("Invalid cookie data (Error 2). Please clear cookies and log in again."); }
@@ -21,7 +21,7 @@ function checkcookies() {
         $newcookie = implode(" ",$theuser);
         if ($theuser[3] == 1) { $expiretime = time()+31536000; } else { $expiretime = 0; }
         setcookie ("dkgame", $newcookie, $expiretime, "/", "", 0);
-        $onlinequery = doquery("UPDATE {{table}} SET onlinetime=NOW() WHERE id='$theuser[0]' LIMIT 1", "users");
+        $onlinequery = doquery("UPDATE {{table}} SET onlinetime=NOW() WHERE id='". mysql_escape_string ($theuser[0]) .' LIMIT 1", "users");
 
     }
 
