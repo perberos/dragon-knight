@@ -4,6 +4,7 @@ $starttime = getmicrotime();
 $numqueries = 0;
 $version = "1.1.11";
 $build = "";
+$controlrow = null;
 
 require ('config.php');
 // Handling for servers with magic_quotes turned on.
@@ -50,8 +51,15 @@ function html_deep($value) {
 }
 
 function getcontrol() {
-	$query = doquery ("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
-	return mysql_fetch_array ($query);
+	global $controlrow;
+
+	if (!$controlrow)
+	{
+		$query = doquery ("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
+		$controlrow = mysql_fetch_array ($query);
+	}
+
+	return $controlrow;
 }
 
 function opendb() { // Open database connection.
