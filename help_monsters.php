@@ -1,5 +1,5 @@
-<?php 
-include('lib.php'); 
+<?php
+include('lib.php');
 $link = opendb();
 $controlquery = doquery("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
 $controlrow = mysql_fetch_array($controlquery);
@@ -9,7 +9,7 @@ ob_start("ob_gzhandler");
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title><? echo $controlrow["gamename"]; ?> Help</title>
+<title><?php echo $controlrow["gamename"]; ?> Help</title>
 <style type="text/css">
 body {
   background-image: url(images/background.jpg);
@@ -70,7 +70,7 @@ a:hover {
 </head>
 <body>
 <a name="top"></a>
-<h1><? echo $controlrow["gamename"]; ?> Help: Monsters</h1>
+<h1><?php echo $controlrow["gamename"]; ?> Help: Monsters</h1>
 [ <a href="help.php">Return to Help</a> | <a href="index.php">Return to the game</a> ]
 
 <br /><br /><hr />

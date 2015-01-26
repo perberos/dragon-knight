@@ -1,5 +1,5 @@
-<?php 
-include('lib.php'); 
+<?php
+include('lib.php');
 $link = opendb();
 $controlquery = doquery("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
 $controlrow = mysql_fetch_array($controlquery);
@@ -9,7 +9,7 @@ ob_start("ob_gzhandler");
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title><? echo $controlrow["gamename"]; ?> Help</title>
+<title><?php echo $controlrow["gamename"]; ?> Help</title>
 <style type="text/css">
 body {
   background-image: url(images/background.jpg);
@@ -70,7 +70,7 @@ a:hover {
 </head>
 <body>
 <a name="top"></a>
-<h1><? echo $controlrow["gamename"]; ?> Help</h1>
+<h1><?php echo $controlrow["gamename"]; ?> Help</h1>
 [ <a href="index.php">Return to the game</a> ]
 
 <br /><br /><hr />
@@ -93,16 +93,16 @@ a:hover {
 <hr />
 
 <h3><a name="intro"></a>Introduction</h3>
-Firstly, I'd like to say thank you for playing my game. The <i>Dragon Knight</i> game engine is the result of several months of 
-planning, coding and testing. The original idea was to create a web-based tribute to the NES game, <i>Dragon 
-Warrior</i>. In its current iteration, only the underlying fighting system really resembles that game, as almost 
+Firstly, I'd like to say thank you for playing my game. The <i>Dragon Knight</i> game engine is the result of several months of
+planning, coding and testing. The original idea was to create a web-based tribute to the NES game, <i>Dragon
+Warrior</i>. In its current iteration, only the underlying fighting system really resembles that game, as almost
 everything else in DK has been made bigger and better. But you should still recognize bits and pieces as stemming
 from <i>Dragon Warrior</i> and other RPGs of old.<br /><br />
 This is the first game I've ever written, and it has definitely been a positive experience. It got difficult at
 times, admittedly, but it was still a lot of fun to write, and even more fun to play. And I hope to use this
 experience so that if I ever want to create another game it will be even better than this one.<br /><br />
 If you are a site administrator, and would like to install a copy of DK on your own server, you may visit the
-<a href="http://dragon.se7enet.com/dev.php" target="_new">development site</a> for <i>Dragon Knight</i>. This page 
+<a href="http://dragon.se7enet.com/dev.php" target="_new">development site</a> for <i>Dragon Knight</i>. This page
 includes the downloadable game souce code, as well as some other resources that developers and administrators may
 find valuable.<br /><br />
 Once again, thanks for playing!<br /><br />
@@ -120,7 +120,7 @@ access to, the speed with which you level up, and the amount of HP/MP/strength/d
 is a basic outline of each of the character classes. For more detailed information about the characters, please
 view the Levels table at the bottom of this page. Also, note that the outline below refers to the stock class setup
 for the game. If your administrator has used his/her own class setup, this information may not be accurate.<br /><br />
-<b><? echo $controlrow["class1name"]; ?></b>
+<b><?php echo $controlrow["class1name"]; ?></b>
 <ul>
 <li />Fast level-ups
 <li />High hit points
@@ -133,7 +133,7 @@ for the game. If your administrator has used his/her own class setup, this infor
 <li />3 +defense spells
 <li />0 +attack spells
 </ul>
-<b><? echo $controlrow["class2name"]; ?></b>
+<b><?php echo $controlrow["class2name"]; ?></b>
 <ul>
 <li />Medium level-ups
 <li />Medium hit points
@@ -146,7 +146,7 @@ for the game. If your administrator has used his/her own class setup, this infor
 <li />3 +defense spells
 <li />3 +attack spells
 </ul>
-<b><? echo $controlrow["class3name"]; ?></b>
+<b><?php echo $controlrow["class3name"]; ?></b>
 <ul>
 <li />Slow level-ups
 <li />Medium hit points
@@ -164,16 +164,16 @@ for the game. If your administrator has used his/her own class setup, this infor
 <br /><br /><hr />
 
 <h3><a name="difficulties"></a>Difficulty Levels</h3>
-<i><? echo $controlrow["gamename"]; ?></i> includes the ability to play using one of three difficulty levels.
+<i><?php echo $controlrow["gamename"]; ?></i> includes the ability to play using one of three difficulty levels.
 All monster statistics in the game are set at a base number. However, using a difficulty multiplier, certain statistics
 are increased. The amount of hit points a monster has goes up, which means it will take longer to kill. But the amount
 of experience and gold you gain from killing it also goes up. So the game is a little bit harder, but it is also more
 rewarding. The following are the three difficulty levels and their statistic multiplier, which applies to the monster's
 HP, experience drop, and gold drop.
 <ul>
-<li /><? echo $controlrow["diff1name"] . ": <b>" . $controlrow["diff1mod"] . "</b>"; ?>
-<li /><? echo $controlrow["diff2name"] . ": <b>" . $controlrow["diff2mod"] . "</b>"; ?>
-<li /><? echo $controlrow["diff3name"] . ": <b>" . $controlrow["diff3mod"] . "</b>"; ?>
+<li /><?php echo $controlrow["diff1name"] . ": <b>" . $controlrow["diff1mod"] . "</b>"; ?>
+<li /><?php echo $controlrow["diff2name"] . ": <b>" . $controlrow["diff2mod"] . "</b>"; ?>
+<li /><?php echo $controlrow["diff3name"] . ": <b>" . $controlrow["diff3mod"] . "</b>"; ?>
 </ul>
 [ <a href="#top">Top</a> ]
 
@@ -204,12 +204,12 @@ administrator, a list of players who have been online recently, and the Babble B
 
 <h3><a name="exploring"></a>Playing The Game: Exploring & Fighting</h3>
 Once you're done in town, you are free to start exploring the world. Use the compass buttons on the left status panel to move around.
-The game world is basically a big square, divided into four quadrants. Each quadrant is <? echo $controlrow["gamesize"]; ?> spaces
+The game world is basically a big square, divided into four quadrants. Each quadrant is <?php echo $controlrow["gamesize"]; ?> spaces
 square. The first town is usually located at (0N,0E). Click the North button from the first town, and now you'll be at (1N,0E).
-Likewise, if you now click the West button, you'll be at (1N,1W). Monster levels increase with every 5 spaces you move outward 
+Likewise, if you now click the West button, you'll be at (1N,1W). Monster levels increase with every 5 spaces you move outward
 from (0N,0E).<br /><br />
 While you're exploring, you will occasionally run into monsters. As in pretty much any other RPG game, you and the monster take turns
-hitting each other in an attempt to reduce each other's hit points to zero. Once you run into a monster, the Exploring screen changes 
+hitting each other in an attempt to reduce each other's hit points to zero. Once you run into a monster, the Exploring screen changes
 to the Fighting screen.<br /><br />
 When a fight begins, you'll see the monster's name and hit points, and the game will ask you for your first command. You then get to
 pick whether you want to fight, use a spell, or run away. Note, though, that sometimes the monster has the chance to hit you
