@@ -7,12 +7,12 @@ if (isset($_GET["do"])) {
 }
 
 function login() {
-    
+
     include('config.php');
     $link = opendb();
-    
+
     if (isset($_POST["submit"])) {
-        
+
         $query = doquery("SELECT * FROM {{table}} WHERE username='".$_POST["username"]."' AND password='".md5($_POST["password"])."' LIMIT 1", "users");
         if (mysql_num_rows($query) != 1) { die("Invalid username or password. Please go back and try again."); }
         $row = mysql_fetch_array($query);
@@ -21,22 +21,20 @@ function login() {
         setcookie("dkgame", $cookie, $expiretime, "/", "", 0);
         header("Location: index.php");
         die();
-        
+
     }
-    
+
     $page = gettemplate("login");
     $title = "Log In";
     display($page, $title, false, false, false, false);
-    
+
 }
-    
+
 
 function logout() {
-    
+
     setcookie("dkgame", "", time()-100000, "/", "", 0);
     header("Location: login.php?do=login");
     die();
-    
-}
 
-?>
+}

@@ -22,30 +22,30 @@ $_COOKIE = array_map('addslashes_deep', $_COOKIE);
 $_COOKIE = array_map('html_deep', $_COOKIE);
 
 function stripslashes_deep($value) {
-    
+
    $value = is_array($value) ?
                array_map('stripslashes_deep', $value) :
                stripslashes($value);
    return $value;
-   
+
 }
 
 function addslashes_deep($value) {
-    
+
    $value = is_array($value) ?
                array_map('addslashes_deep', $value) :
                addslashes($value);
    return $value;
-   
+
 }
 
 function html_deep($value) {
-    
+
    $value = is_array($value) ?
                array_map('html_deep', $value) :
                htmlspecialchars($value);
    return $value;
-   
+
 }
 
 function opendb() { // Open database connection.
@@ -59,7 +59,7 @@ function opendb() { // Open database connection.
 }
 
 function doquery($query, $table) { // Something of a tiny little database abstraction layer.
-    
+
     include('config.php');
     global $numqueries;
     $sqlquery = mysql_query(str_replace("{{table}}", $dbsettings["prefix"] . "_" . $table, $query)) or die(mysql_error());
@@ -73,22 +73,22 @@ function gettemplate($templatename) { // SQL query for the template.
     $filename = "templates/" . $templatename . ".php";
     include("$filename");
     return $template;
-    
+
 }
 
 function parsetemplate($template, $array) { // Replace template with proper content.
-    
+
     foreach($array as $a => $b) {
         $template = str_replace("{{{$a}}}", $b, $template);
     }
     return $template;
-    
+
 }
 
 function getmicrotime() { // Used for timing script operations.
 
-    list($usec, $sec) = explode(" ",microtime()); 
-    return ((float)$usec + (float)$sec); 
+    list($usec, $sec) = explode(" ",microtime());
+    return ((float)$usec + (float)$sec);
 
 }
 
@@ -111,7 +111,7 @@ function is_email($email) { // Thanks to "mail(at)philipp-louis.de" from php.net
 }
 
 function makesafe($d) {
-    
+
     $d = str_replace("\t","",$d);
     $d = str_replace("<","&#60;",$d);
     $d = str_replace(">","&#62;",$d);
@@ -119,19 +119,19 @@ function makesafe($d) {
     $d = str_replace("|","??",$d);
     $d = str_replace("  "," &nbsp;",$d);
     return $d;
-    
+
 }
 
 function admindisplay($content, $title) { // Finalize page and output to browser.
-    
+
     global $numqueries, $userrow, $controlrow, $starttime, $version, $build;
     if (!isset($controlrow)) {
         $controlquery = doquery("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
         $controlrow = mysql_fetch_array($controlquery);
     }
-    
+
     $template = gettemplate("admin");
-    
+
     // Make page tags for XHTML validation.
     $xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
     . "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\">\n"
@@ -150,25 +150,25 @@ function admindisplay($content, $title) { // Finalize page and output to browser
     if ($controlrow["compression"] == 1) { ob_start("ob_gzhandler"); }
     echo $page;
     die();
-    
+
 }
 
 function display($content, $title, $topnav=true, $leftnav=true, $rightnav=true, $badstart=false) { // Finalize page and output to browser.
-    
+
     global $numqueries, $userrow, $controlrow, $version, $build;
     if (!isset($controlrow)) {
         $controlquery = doquery("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
         $controlrow = mysql_fetch_array($controlquery);
     }
     if ($badstart == false) { global $starttime; } else { $starttime = $badstart; }
-    
+
     // Make page tags for XHTML validation.
     $xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
     . "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\">\n"
     . "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
 
     $template = gettemplate("primary");
-    
+
     if ($rightnav == true) { $rightnav = gettemplate("rightnav"); } else { $rightnav = ""; }
     if ($leftnav == true) { $leftnav = gettemplate("leftnav"); } else { $leftnav = ""; }
     if ($topnav == true) {
@@ -176,14 +176,14 @@ function display($content, $title, $topnav=true, $leftnav=true, $rightnav=true, 
     } else {
         $topnav = "<a href=\"login.php?do=login\"><img src=\"images/button_login.gif\" alt=\"Log In\" title=\"Log In\" border=\"0\" /></a> <a href=\"users.php?do=register\"><img src=\"images/button_register.gif\" alt=\"Register\" title=\"Register\" border=\"0\" /></a> <a href=\"help.php\"><img src=\"images/button_help.gif\" alt=\"Help\" title=\"Help\" border=\"0\" /></a>";
     }
-    
+
     if (isset($userrow)) {
-        
+
         // Get userrow again, in case something has been updated.
         $userquery = doquery("SELECT * FROM {{table}} WHERE id='".$userrow["id"]."' LIMIT 1", "users");
         unset($userrow);
         $userrow = mysql_fetch_array($userquery);
-        
+
         // Current town name.
         if ($userrow["currentaction"] == "In Town") {
             $townquery = doquery("SELECT * FROM {{table}} WHERE latitude='".$userrow["latitude"]."' AND longitude='".$userrow["longitude"]."' LIMIT 1", "towns");
@@ -192,18 +192,18 @@ function display($content, $title, $topnav=true, $leftnav=true, $rightnav=true, 
         } else {
             $userrow["currenttown"] = "";
         }
-        
+
         if ($controlrow["forumtype"] == 0) { $userrow["forumslink"] = ""; }
         elseif ($controlrow["forumtype"] == 1) { $userrow["forumslink"] = "<a href=\"forum.php\">Forum</a><br />"; }
         elseif ($controlrow["forumtype"] == 2) { $userrow["forumslink"] = "<a href=\"".$controlrow["forumaddress"]."\">Forum</a><br />"; }
-        
+
         // Format various userrow stuffs...
         if ($userrow["latitude"] < 0) { $userrow["latitude"] = $userrow["latitude"] * -1 . "S"; } else { $userrow["latitude"] .= "N"; }
         if ($userrow["longitude"] < 0) { $userrow["longitude"] = $userrow["longitude"] * -1 . "W"; } else { $userrow["longitude"] .= "E"; }
         $userrow["experience"] = number_format($userrow["experience"]);
         $userrow["gold"] = number_format($userrow["gold"]);
         if ($userrow["authlevel"] == 1) { $userrow["adminlink"] = "<a href=\"admin.php\">Admin</a><br />"; } else { $userrow["adminlink"] = ""; }
-        
+
         // HP/MP/TP bars.
         $stathp = ceil($userrow["currenthp"] / $userrow["maxhp"] * 100);
         if ($userrow["maxmp"] != 0) { $statmp = ceil($userrow["currentmp"] / $userrow["maxmp"] * 100); } else { $statmp = 0; }
@@ -226,7 +226,7 @@ function display($content, $title, $topnav=true, $leftnav=true, $rightnav=true, 
         $stattable .= "</td></tr></table></td>\n";
         $stattable .= "</tr><tr><td>HP</td><td>MP</td><td>TP</td></tr></table>\n";
         $userrow["statbars"] = $stattable;
-        
+
         // Now make numbers stand out if they're low.
         if ($userrow["currenthp"] <= ($userrow["maxhp"]/5)) { $userrow["currenthp"] = "<blink><span class=\"highlight\"><b>*".$userrow["currenthp"]."*</b></span></blink>"; }
         if ($userrow["currentmp"] <= ($userrow["maxmp"]/5)) { $userrow["currentmp"] = "<blink><span class=\"highlight\"><b>*".$userrow["currentmp"]."*</b></span></blink>"; }
@@ -244,7 +244,7 @@ function display($content, $title, $topnav=true, $leftnav=true, $rightnav=true, 
             }
         }
         if ($userrow["magiclist"] == "") { $userrow["magiclist"] = "None"; }
-        
+
         // Travel To list.
         $townslist = explode(",",$userrow["towns"]);
         $townquery2 = doquery("SELECT * FROM {{table}} ORDER BY id", "towns");
@@ -254,11 +254,11 @@ function display($content, $title, $topnav=true, $leftnav=true, $rightnav=true, 
             foreach($townslist as $a => $b) {
                 if ($b == $townrow2["id"]) { $town = true; }
             }
-            if ($town == true) { 
-                $userrow["townslist"] .= "<a href=\"index.php?do=gotown:".$townrow2["id"]."\">".$townrow2["name"]."</a><br />\n"; 
+            if ($town == true) {
+                $userrow["townslist"] .= "<a href=\"index.php?do=gotown:".$townrow2["id"]."\">".$townrow2["name"]."</a><br />\n";
             }
         }
-        
+
     } else {
         $userrow = array();
     }
@@ -276,11 +276,9 @@ function display($content, $title, $topnav=true, $leftnav=true, $rightnav=true, 
         "build"=>$build);
     $page = parsetemplate($template, $finalarray);
     $page = $xml . $page;
-    
+
     if ($controlrow["compression"] == 1) { ob_start("ob_gzhandler"); }
     echo $page;
     die();
-    
-}
 
-?>
+}

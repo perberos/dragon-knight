@@ -21,7 +21,7 @@ function dobatch ($p_query) {
 }
 
 if (isset($_POST["submit"])) {
-    
+
 $users = $prefix . "_users";
 
 $levels = array(1=>"",2=>"",3=>"");
@@ -226,7 +226,7 @@ $levels["2"] = array(
     97=>"0,1,6,11,2,7,14,12,17,3,8,15,18,13,19,16",
     98=>"0,1,6,11,2,7,14,12,17,3,8,15,18,13,19,16",
     99=>"0,1,6,11,2,7,14,12,17,3,8,15,18,13,19,16");
-    
+
 $levels["3"] = array(
     1=>"0",
     2=>"0,1",
@@ -327,7 +327,7 @@ $levels["3"] = array(
     97=>"0,1,6,11,2,7,17,12,14,3,8,18,4,13,9,15",
     98=>"0,1,6,11,2,7,17,12,14,3,8,18,4,13,9,15",
     99=>"0,1,6,11,2,7,17,12,14,3,8,18,4,13,9,15");
-    
+
 $errors = 0; $errorlist = "";
 
 $mainquery = mysql_query("SELECT id,level,charclass,spells FROM $users ORDER BY id");
@@ -337,7 +337,7 @@ while ($mainrow = mysql_fetch_array($mainquery)) {
     $newspell = $levels[$charclass][$level];
     $newquery = mysql_query("UPDATE $users SET spells='$newspell' WHERE id='".$mainrow["id"]."' LIMIT 1");
     if ($newquery != true) {
-        $errors++; $errorlist .= mysql_error() . "<br />";  
+        $errors++; $errorlist .= mysql_error() . "<br />";
     }
 }
 
@@ -350,12 +350,10 @@ if (dobatch($query) == 1) { echo "Users table upgraded.<br />"; } else { $errors
 unset($query);
 
 if ($errors == 0) { echo "<br />Upgrade finished."; } else { echo $errorlist; }
-    
+
 } else {
-    
+
     echo "Click the button below to run the upgrade script.<br /><form action=\"upgrade_to_112.php\" method=\"post\"><input type=\"submit\" name=\"submit\" value=\"Upgrade\" /></form>";
     die();
-    
-}
 
-?>
+}

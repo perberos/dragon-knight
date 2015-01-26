@@ -4,53 +4,53 @@ include('lib.php');
 $link = opendb();
 
 if (isset($_GET["do"])) {
-    
+
     $do = $_GET["do"];
     if ($do == "register") { register(); }
     elseif ($do == "verify") { verify(); }
     elseif ($do == "lostpassword") { lostpassword(); }
     elseif ($do == "changepassword") { changepassword(); }
-    
+
 }
 
 function register() { // Register a new account.
-    
+
     $controlquery = doquery("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
     $controlrow = mysql_fetch_array($controlquery);
-    
+
     if (isset($_POST["submit"])) {
-        
+
         extract($_POST);
-        
+
         $errors = 0; $errorlist = "";
-        
+
         // Process username.
         if ($username == "") { $errors++; $errorlist .= "Username field is required.<br />"; }
         if (preg_match("/[^A-z0-9_\-]/", $username)==1) { $errors++; $errorlist .= "Username must be alphanumeric.<br />"; } // Thanks to "Carlos Pires" from php.net!
         $usernamequery = doquery("SELECT username FROM {{table}} WHERE username='$username' LIMIT 1","users");
         if (mysql_num_rows($usernamequery) > 0) { $errors++; $errorlist .= "Username already taken - unique username required.<br />"; }
-        
+
         // Process charname.
         if ($charname == "") { $errors++; $errorlist .= "Character Name field is required.<br />"; }
         if (preg_match("/[^A-z0-9_\-]/", $charname)==1) { $errors++; $errorlist .= "Character Name must be alphanumeric.<br />"; } // Thanks to "Carlos Pires" from php.net!
         $characternamequery = doquery("SELECT charname FROM {{table}} WHERE charname='$charname' LIMIT 1","users");
         if (mysql_num_rows($characternamequery) > 0) { $errors++; $errorlist .= "Character Name already taken - unique Character Name required.<br />"; }
-    
+
         // Process email address.
         if ($email1 == "" || $email2 == "") { $errors++; $errorlist .= "Email fields are required.<br />"; }
         if ($email1 != $email2) { $errors++; $errorlist .= "Emails don't match.<br />"; }
         if (! is_email($email1)) { $errors++; $errorlist .= "Email isn't valid.<br />"; }
         $emailquery = doquery("SELECT email FROM {{table}} WHERE email='$email1' LIMIT 1","users");
         if (mysql_num_rows($emailquery) > 0) { $errors++; $errorlist .= "Email already taken - unique email address required.<br />"; }
-        
+
         // Process password.
         if (trim($password1) == "") { $errors++; $errorlist .= "Password field is required.<br />"; }
         if (preg_match("/[^A-z0-9_\-]/", $password1)==1) { $errors++; $errorlist .= "Password must be alphanumeric.<br />"; } // Thanks to "Carlos Pires" from php.net!
         if ($password1 != $password2) { $errors++; $errorlist .= "Passwords don't match.<br />"; }
         $password = md5($password1);
-        
+
         if ($errors == 0) {
-            
+
             if ($controlrow["verifyemail"] == 1) {
                 $verifycode = "";
                 for ($i=0; $i<8; $i++) {
@@ -59,9 +59,9 @@ function register() { // Register a new account.
             } else {
                 $verifycode='1';
             }
-            
+
             $query = doquery("INSERT INTO {{table}} SET id='',regdate=NOW(),verify='$verifycode',username='$username',password='$password',email='$email1',charname='$charname',charclass='$charclass',difficulty='$difficulty'", "users") or die(mysql_error());
-            
+
             if ($controlrow["verifyemail"] == 1) {
                 if (sendregmail($email1, $verifycode) == true) {
                     $page = "Your account was created successfully.<br /><br />You should receive an Account Verification email shortly. You will need the verification code contained in that email before you are allowed to log in. Once you have received the email, please visit the <a href=\"users.php?do=verify\">Verification Page</a> to enter your code and start playing.";
@@ -71,32 +71,32 @@ function register() { // Register a new account.
             } else {
                 $page = "Your account was created succesfully.<br /><br />You may now continue to the <a href=\"login.php?do=login\">Login Page</a> and continue playing ".$controlrow["gamename"]."!";
             }
-            
+
         } else {
-            
+
             $page = "The following error(s) occurred when your account was being made:<br /><span style=\"color:red;\">$errorlist</span><br />Please go back and try again.";
-            
+
         }
-        
+
     } else {
-        
+
         $page = gettemplate("register");
-        if ($controlrow["verifyemail"] == 1) { 
+        if ($controlrow["verifyemail"] == 1) {
             $controlrow["verifytext"] = "<br /><span class=\"small\">A verification code will be sent to the address above, and you will not be able to log in without first entering the code. Please be sure to enter your correct email address.</span>";
         } else {
             $controlrow["verifytext"] = "";
         }
         $page = parsetemplate($page, $controlrow);
-        
+
     }
-    
+
     $topnav = "<a href=\"login.php?do=login\"><img src=\"images/button_login.gif\" alt=\"Log In\" border=\"0\" /></a><a href=\"users.php?do=register\"><img src=\"images/button_register.gif\" alt=\"Register\" border=\"0\" /></a><a href=\"help.php\"><img src=\"images/button_help.gif\" alt=\"Help\" border=\"0\" /></a>";
     display($page, "Register", false, false, false);
-    
+
 }
 
 function verify() {
-    
+
     if (isset($_POST["submit"])) {
         extract($_POST);
         $userquery = doquery("SELECT username,email,verify FROM {{table}} WHERE username='$username' LIMIT 1","users");
@@ -112,11 +112,11 @@ function verify() {
     $page = gettemplate("verify");
     $topnav = "<a href=\"login.php?do=login\"><img src=\"images/button_login.gif\" alt=\"Log In\" border=\"0\" /></a><a href=\"users.php?do=register\"><img src=\"images/button_register.gif\" alt=\"Register\" border=\"0\" /></a><a href=\"help.php\"><img src=\"images/button_help.gif\" alt=\"Help\" border=\"0\" /></a>";
     display($page, "Verify Email", false, false, false);
-    
+
 }
 
 function lostpassword() {
-    
+
     if (isset($_POST["submit"])) {
         extract($_POST);
         $userquery = doquery("SELECT email FROM {{table}} WHERE email='$email' LIMIT 1","users");
@@ -137,11 +137,11 @@ function lostpassword() {
     $page = gettemplate("lostpassword");
     $topnav = "<a href=\"login.php?do=login\"><img src=\"images/button_login.gif\" alt=\"Log In\" border=\"0\" /></a><a href=\"users.php?do=register\"><img src=\"images/button_register.gif\" alt=\"Register\" border=\"0\" /></a><a href=\"help.php\"><img src=\"images/button_help.gif\" alt=\"Help\" border=\"0\" /></a>";
     display($page, "Lost Password", false, false, false);
-    
+
 }
 
 function changepassword() {
-    
+
     if (isset($_POST["submit"])) {
         extract($_POST);
         $userquery = doquery("SELECT * FROM {{table}} WHERE username='$username' LIMIT 1","users");
@@ -158,18 +158,18 @@ function changepassword() {
     }
     $page = gettemplate("changepassword");
     $topnav = "<a href=\"login.php?do=login\"><img src=\"images/button_login.gif\" alt=\"Log In\" border=\"0\" /></a><a href=\"users.php?do=register\"><img src=\"images/button_register.gif\" alt=\"Register\" border=\"0\" /></a><a href=\"help.php\"><img src=\"images/button_help.gif\" alt=\"Help\" border=\"0\" /></a>";
-    display($page, "Change Password", false, false, false); 
-    
+    display($page, "Change Password", false, false, false);
+
 }
 
 function sendpassemail($emailaddress, $password) {
-    
+
     $controlquery = doquery("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
     $controlrow = mysql_fetch_array($controlquery);
     extract($controlrow);
-    
+
 $email = <<<END
-You or someone using your email address submitted a Lost Password application on the $gamename server, located at $gameurl. 
+You or someone using your email address submitted a Lost Password application on the $gamename server, located at $gameurl.
 
 We have issued you a new password so you can log back into the game.
 
@@ -180,20 +180,20 @@ END;
 
     $status = mymail($emailaddress, "$gamename Lost Password", $email);
     return $status;
-    
+
 }
 
 function sendregmail($emailaddress, $vercode) {
-    
+
     $controlquery = doquery("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
     $controlrow = mysql_fetch_array($controlquery);
     extract($controlrow);
     $verurl = $gameurl . "?do=verify";
-    
+
 $email = <<<END
 You or someone using your email address recently signed up for an account on the $gamename server, located at $gameurl.
 
-This email is sent to verify your registration email. In order to begin using your account, you must verify your email address. 
+This email is sent to verify your registration email. In order to begin using your account, you must verify your email address.
 Please visit the Verification Page ($verurl) and enter the code below to activate your account.
 Verification code: $vercode
 
@@ -202,7 +202,7 @@ END;
 
     $status = mymail($emailaddress, "$gamename Account Verification", $email);
     return $status;
-    
+
 }
 
 function mymail($to, $title, $body, $from = '') { // thanks to arto dot PLEASE dot DO dot NOT dot SPAM at artoaaltonen dot fi.
@@ -210,7 +210,7 @@ function mymail($to, $title, $body, $from = '') { // thanks to arto dot PLEASE d
     $controlquery = doquery("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
     $controlrow = mysql_fetch_array($controlquery);
     extract($controlrow);
-    
+
 
   $from = trim($from);
 
@@ -238,8 +238,5 @@ function mymail($to, $title, $body, $from = '') { // thanks to arto dot PLEASE d
   $body  = str_replace("\n", "\r\n", $body);
 
   return mail($to, $title, $body, $head);
-  
+
 }
-
-
-?>

@@ -21,7 +21,7 @@ function dobatch ($p_query) {
 }
 
 if (isset($_POST["submit"])) {
-    
+
 $control = $prefix . "_control";
 $users = $prefix . "_users";
 $query = <<<END
@@ -85,12 +85,10 @@ if ($errors != 0) {
 } else {
     echo "<br /><b>The upgrade completed successfully. Please log in to the game and visit the control panel to update your main game settings.<br /><br />You should also delete this file from your Dragon Knight directory for security reasons.</b>";
 }
-    
+
 } else {
-    
+
     echo "Click the button below to run the upgrade script.<br /><form action=\"upgrade_to_110.php\" method=\"post\"><input type=\"submit\" name=\"submit\" value=\"Upgrade\" /></form>";
     die();
-    
-}
 
-?>
+}

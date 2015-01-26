@@ -30,7 +30,7 @@ function dobatch ($p_query) {
 }
 
 function first() { // First page - show warnings and gather info.
-    
+
 $page = <<<END
 <html>
 <head>
@@ -54,11 +54,11 @@ Click the appropriate button below for your preferred installation method.<br />
 END;
 echo $page;
 die();
-  
+
 }
 
 function second() { // Second page - set up the database tables.
-    
+
     global $dbsettings;
     echo "<html><head><title>Dragon Knight Installation</title></head><body><b>Dragon Knight Installation: Page Two</b><br /><br />";
     $prefix = $dbsettings["prefix"];
@@ -73,9 +73,9 @@ function second() { // Second page - set up the database tables.
     $spells = $prefix . "_spells";
     $towns = $prefix . "_towns";
     $users = $prefix . "_users";
-    
+
     if (isset($_POST["complete"])) { $full = true; } else { $full = false; }
-    
+
 $query = <<<END
 CREATE TABLE `$babble` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -705,12 +705,12 @@ CREATE TABLE `$users` (
 END;
 if (dobatch($query) == 1) { echo "Users table created.<br />"; } else { echo "Error creating Users table."; }
 unset($query);
-    
+
     global $start;
     $time = round((getmicrotime() - $start), 4);
     echo "<br />Database setup complete in $time seconds.<br /><br /><a href=\"install.php?page=3\">Click here to continue with installation.</a></body></html>";
     die();
-    
+
 }
 
 function third() { // Third page: gather user info for admin account.
@@ -745,7 +745,7 @@ die();
 }
 
 function fourth() { // Final page: insert new user row, congratulate the person on a job well done.
-    
+
     extract($_POST);
     if (!isset($username)) { die("Username is required."); }
     if (!isset($password1)) { die("Password is required."); }
@@ -756,7 +756,7 @@ function fourth() { // Final page: insert new user row, congratulate the person 
     if ($email1 != $email2) { die("Emails don't match."); }
     if (!isset($charname)) { die("Character Name is required."); }
     $password = md5($password1);
-    
+
     global $dbsettings;
     $users = $dbsettings["prefix"] . "_users";
     $query = mysql_query("INSERT INTO $users SET id='1',username='$username',password='$password',email='$email1',verify='1',charname='$charname',charclass='$charclass',regdate=NOW(),onlinetime=NOW(),authlevel='1'") or die(mysql_error());
@@ -772,8 +772,8 @@ Your admin account was created successfully. Installation is complete.<br /><br 
 Be sure to delete install.php from your Dragon Knight directory for security purposes.<br /><br />
 You are now ready to <a href="index.php">play the game</a>. Note that you must log in through the public section before being allowed into the control panel. Once logged in, an "Admin" link will appear in the Functions box of the left sidebar panel.<br /><br/>
 Thank you for using Dragon Knight!<br /><br />-----<br /><br />
-<b>Optional:</b> Dragon Knight is a free product, and does not require registration of any sort. However, there is an 
-optional "call home" function in the installer, which notifies the author of your game installation. The ONLY information 
+<b>Optional:</b> Dragon Knight is a free product, and does not require registration of any sort. However, there is an
+optional "call home" function in the installer, which notifies the author of your game installation. The ONLY information
 transmitted with this function is the URL to your game. This is included mainly to satisfy the author's curiosity about
 how many copies of the game are being installed and used. If you choose to submit your URL to the author, please
 <a href="install.php?page=5">click here</a>.
@@ -787,10 +787,10 @@ END;
 }
 
 function fifth() { // Call Home function.
-    
+
     $url = "http://".$_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"];
     if (mail("jamin@se7enet.com", "Dragon Knight Call Home", "$url") != true) { die("Dragon Knight was unable to send your URL. Please go back and try again, or just continue on to <a href=\"index.php\">the game</a>."); }
-    
+
 $page = <<<END
 <html>
 <head>
@@ -803,10 +803,8 @@ You are now ready to <a href="index.php">play the game</a>. Note that you must l
 </body>
 </html>
 END;
-    
+
     echo $page;
     die();
-    
-}
 
-?>                                                                           
+}

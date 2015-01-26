@@ -11,7 +11,7 @@ $controlrow = mysql_fetch_array($controlquery);
 
 if (isset($_GET["do"])) {
     $do = explode(":",$_GET["do"]);
-    
+
     if ($do[0] == "main") { main(); }
     elseif ($do[0] == "items") { items(); }
     elseif ($do[0] == "edititem") { edititem($do[1]); }
@@ -28,18 +28,18 @@ if (isset($_GET["do"])) {
     elseif ($do[0] == "users") { users(); }
     elseif ($do[0] == "edituser") { edituser($do[1]); }
     elseif ($do[0] == "news") { addnews(); }
-    
+
 } else { donothing(); }
 
 function donothing() {
-    
+
     $page = "Welcome to the Dragon Knight Administration section. Use the links on the left bar to control and edit various elements of the game.<br /><br />Please note that the control panel has been created mostly as a shortcut for certain individual settings. It is meant for use primarily with editing one thing at a time. If you need to completely replace an entire table (say, to replace all stock monsters with your own new ones), it is suggested that you use a more in-depth database tool such as <a href=\"http://www.phpmyadmin.net\" target=\"_new\">phpMyAdmin</a>. Also, you may want to have a copy of the Dragon Knight development kit, available from the <a href=\"http://dragon.se7enet.com/dev.php\">Dragon Knight homepage</a>.<br /><br />Also, you should be aware that certain portions of the DK code are dependent on the formatting of certain database results (for example, the special attributes on item drops). While I have attempted to point these out throughout the admin script, you should definitely pay attention and be careful when editing some fields, because mistakes in the database content may result in script errors or your game breaking completely.";
     admindisplay($page, "Admin Home");
-    
+
 }
 
 function main() {
-    
+
     if (isset($_POST["submit"])) {
         extract($_POST);
         $errors = 0;
@@ -56,17 +56,17 @@ function main() {
         if ($diff3name == "") { $errors++; $errorlist .= "Difficulty 3 name is required.<br />"; }
         if ($diff2mod == "") { $errors++; $errorlist .= "Difficulty 2 value is required.<br />"; }
         if ($diff3mod == "") { $errors++; $errorlist .= "Difficulty 3 value is required.<br />"; }
-        
-        if ($errors == 0) { 
+
+        if ($errors == 0) {
             $query = doquery("UPDATE {{table}} SET gamename='$gamename',gamesize='$gamesize',forumtype='$forumtype',forumaddress='$forumaddress',compression='$compression',class1name='$class1name',class2name='$class2name',class3name='$class3name',diff1name='$diff1name',diff2name='$diff2name',diff3name='$diff3name',diff2mod='$diff2mod',diff3mod='$diff3mod',gameopen='$gameopen',verifyemail='$verifyemail',gameurl='$gameurl',adminemail='$adminemail',shownews='$shownews',showonline='$showonline',showbabble='$showbabble' WHERE id='1' LIMIT 1", "control");
             admindisplay("Settings updated.","Main Settings");
         } else {
             admindisplay("<b>Errors:</b><br /><div style=\"color:red;\">$errorlist</div><br />Please go back and try again.", "Main Settings");
         }
     }
-    
+
     global $controlrow;
-    
+
 $page = <<<END
 <b><u>Main Settings</u></b><br />
 These options control several major settings for the overall game engine.<br /><br />
@@ -119,7 +119,7 @@ END;
 }
 
 function items() {
-    
+
     $query = doquery("SELECT id,name FROM {{table}} ORDER BY id", "items");
     $page = "<b><u>Edit Items</u></b><br />Click an item's name to edit it.<br /><br /><table width=\"50%\">\n";
     $count = 1;
@@ -130,13 +130,13 @@ function items() {
     if (mysql_num_rows($query) == 0) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">No items found.</td></tr>\n"; }
     $page .= "</table>";
     admindisplay($page, "Edit Items");
-    
+
 }
 
 function edititem($id) {
-    
+
     if (isset($_POST["submit"])) {
-        
+
         extract($_POST);
         $errors = 0;
         $errorlist = "";
@@ -146,17 +146,17 @@ function edititem($id) {
         if ($attribute == "") { $errors++; $errorlist .= "Attribute is required.<br />"; }
         if (!is_numeric($attribute)) { $errors++; $errorlist .= "Attribute must be a number.<br />"; }
         if ($special == "" || $special == " ") { $special = "X"; }
-        
-        if ($errors == 0) { 
+
+        if ($errors == 0) {
             $query = doquery("UPDATE {{table}} SET name='$name',type='$type',buycost='$buycost',attribute='$attribute',special='$special' WHERE id='$id' LIMIT 1", "items");
             admindisplay("Item updated.","Edit Items");
         } else {
             admindisplay("<b>Errors:</b><br /><div style=\"color:red;\">$errorlist</div><br />Please go back and try again.", "Edit Items");
-        }        
-        
-    }   
-        
-    
+        }
+
+    }
+
+
     $query = doquery("SELECT * FROM {{table}} WHERE id='$id' LIMIT 1", "items");
     $row = mysql_fetch_array($query);
 
@@ -186,18 +186,18 @@ dexterity - dexterity (which also adds to defensepower)<br />
 attackpower - total attack power<br />
 defensepower - total defense power
 END;
-    
+
     if ($row["type"] == 1) { $row["type1select"] = "selected=\"selected\" "; } else { $row["type1select"] = ""; }
     if ($row["type"] == 2) { $row["type2select"] = "selected=\"selected\" "; } else { $row["type2select"] = ""; }
     if ($row["type"] == 3) { $row["type3select"] = "selected=\"selected\" "; } else { $row["type3select"] = ""; }
-    
+
     $page = parsetemplate($page, $row);
     admindisplay($page, "Edit Items");
-    
+
 }
 
 function drops() {
-    
+
     $query = doquery("SELECT id,name FROM {{table}} ORDER BY id", "drops");
     $page = "<b><u>Edit Drops</u></b><br />Click an item's name to edit it.<br /><br /><table width=\"50%\">\n";
     $count = 1;
@@ -208,13 +208,13 @@ function drops() {
     if (mysql_num_rows($query) == 0) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">No items found.</td></tr>\n"; }
     $page .= "</table>";
     admindisplay($page, "Edit Drops");
-    
+
 }
 
 function editdrop($id) {
-    
+
     if (isset($_POST["submit"])) {
-        
+
         extract($_POST);
         $errors = 0;
         $errorlist = "";
@@ -223,17 +223,17 @@ function editdrop($id) {
         if (!is_numeric($mlevel)) { $errors++; $errorlist .= "Monster level must be a number.<br />"; }
         if ($attribute1 == "" || $attribute1 == " " || $attribute1 == "X") { $errors++; $errorlist .= "First attribute is required.<br />"; }
         if ($attribute2 == "" || $attribute2 == " ") { $attribute2 = "X"; }
-        
-        if ($errors == 0) { 
+
+        if ($errors == 0) {
             $query = doquery("UPDATE {{table}} SET name='$name',mlevel='$mlevel',attribute1='$attribute1',attribute2='$attribute2' WHERE id='$id' LIMIT 1", "drops");
             admindisplay("Item updated.","Edit Drops");
         } else {
             admindisplay("<b>Errors:</b><br /><div style=\"color:red;\">$errorlist</div><br />Please go back and try again.", "Edit Drops");
-        }        
-        
-    }   
-        
-    
+        }
+
+    }
+
+
     $query = doquery("SELECT * FROM {{table}} WHERE id='$id' LIMIT 1", "drops");
     $row = mysql_fetch_array($query);
 
@@ -262,14 +262,14 @@ dexterity - dexterity (which also adds to defensepower)<br />
 attackpower - total attack power<br />
 defensepower - total defense power
 END;
-    
+
     $page = parsetemplate($page, $row);
     admindisplay($page, "Edit Drops");
-    
+
 }
 
 function towns() {
-    
+
     $query = doquery("SELECT id,name FROM {{table}} ORDER BY id", "towns");
     $page = "<b><u>Edit Towns</u></b><br />Click an town's name to edit it.<br /><br /><table width=\"50%\">\n";
     $count = 1;
@@ -280,13 +280,13 @@ function towns() {
     if (mysql_num_rows($query) == 0) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">No towns found.</td></tr>\n"; }
     $page .= "</table>";
     admindisplay($page, "Edit Towns");
-    
+
 }
 
 function edittown($id) {
-    
+
     if (isset($_POST["submit"])) {
-        
+
         extract($_POST);
         $errors = 0;
         $errorlist = "";
@@ -303,17 +303,17 @@ function edittown($id) {
         if ($travelpoints == "") { $errors++; $errorlist .= "Travel Points is required.<br />"; }
         if (!is_numeric($travelpoints)) { $errors++; $errorlist .= "Travel Points must be a number.<br />"; }
         if ($itemslist == "") { $errors++; $errorlist .= "Items List is required.<br />"; }
-        
-        if ($errors == 0) { 
+
+        if ($errors == 0) {
             $query = doquery("UPDATE {{table}} SET name='$name',latitude='$latitude',longitude='$longitude',innprice='$innprice',mapprice='$mapprice',travelpoints='$travelpoints',itemslist='$itemslist' WHERE id='$id' LIMIT 1", "towns");
             admindisplay("Town updated.","Edit Towns");
         } else {
             admindisplay("<b>Errors:</b><br /><div style=\"color:red;\">$errorlist</div><br />Please go back and try again.", "Edit Towns");
-        }        
-        
-    }   
-        
-    
+        }
+
+    }
+
+
     $query = doquery("SELECT * FROM {{table}} WHERE id='$id' LIMIT 1", "towns");
     $row = mysql_fetch_array($query);
 
@@ -333,26 +333,26 @@ $page = <<<END
 <input type="submit" name="submit" value="Submit" /> <input type="reset" name="reset" value="Reset" />
 </form>
 END;
-    
+
     $page = parsetemplate($page, $row);
     admindisplay($page, "Edit Towns");
-    
+
 }
 
 function monsters() {
-    
+
     global $controlrow;
-    
+
     $statquery = doquery("SELECT * FROM {{table}} ORDER BY level DESC LIMIT 1", "monsters");
     $statrow = mysql_fetch_array($statquery);
-    
+
     $query = doquery("SELECT id,name FROM {{table}} ORDER BY id", "monsters");
     $page = "<b><u>Edit Monsters</u></b><br />";
-    
+
     if (($controlrow["gamesize"]/5) != $statrow["level"]) {
         $page .= "<span class=\"highlight\">Note:</span> Your highest monster level does not match with your entered map size. Highest monster level should be ".($controlrow["gamesize"]/5).", yours is ".$statrow["level"].". Please fix this before opening the game to the public.<br /><br />";
     } else { $page .= "Monster level and map size match. No further actions are required for map compatibility.<br /><br />"; }
-    
+
     $page .= "Click an monster's name to edit it.<br /><br /><table width=\"50%\">\n";
     $count = 1;
     while ($row = mysql_fetch_array($query)) {
@@ -362,13 +362,13 @@ function monsters() {
     if (mysql_num_rows($query) == 0) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">No towns found.</td></tr>\n"; }
     $page .= "</table>";
     admindisplay($page, "Edit Monster");
-    
+
 }
 
 function editmonster($id) {
-    
+
     if (isset($_POST["submit"])) {
-        
+
         extract($_POST);
         $errors = 0;
         $errorlist = "";
@@ -385,17 +385,17 @@ function editmonster($id) {
         if (!is_numeric($maxexp)) { $errors++; $errorlist .= "Max Exp must be a number.<br />"; }
         if ($maxgold == "") { $errors++; $errorlist .= "Max Gold is required.<br />"; }
         if (!is_numeric($maxgold)) { $errors++; $errorlist .= "Max Gold must be a number.<br />"; }
-        
-        if ($errors == 0) { 
+
+        if ($errors == 0) {
             $query = doquery("UPDATE {{table}} SET name='$name',maxhp='$maxhp',maxdam='$maxdam',armor='$armor',level='$level',maxexp='$maxexp',maxgold='$maxgold',immune='$immune' WHERE id='$id' LIMIT 1", "monsters");
             admindisplay("Monster updated.","Edit monsters");
         } else {
             admindisplay("<b>Errors:</b><br /><div style=\"color:red;\">$errorlist</div><br />Please go back and try again.", "Edit monsters");
-        }        
-        
-    }   
-        
-    
+        }
+
+    }
+
+
     $query = doquery("SELECT * FROM {{table}} WHERE id='$id' LIMIT 1", "monsters");
     $row = mysql_fetch_array($query);
 
@@ -416,18 +416,18 @@ $page = <<<END
 <input type="submit" name="submit" value="Submit" /> <input type="reset" name="reset" value="Reset" />
 </form>
 END;
-    
+
     if ($row["immune"] == 1) { $row["immune1select"] = "selected=\"selected\" "; } else { $row["immune1select"] = ""; }
     if ($row["immune"] == 2) { $row["immune2select"] = "selected=\"selected\" "; } else { $row["immune2select"] = ""; }
     if ($row["immune"] == 3) { $row["immune3select"] = "selected=\"selected\" "; } else { $row["immune3select"] = ""; }
-    
+
     $page = parsetemplate($page, $row);
     admindisplay($page, "Edit Monsters");
-    
+
 }
 
 function spells() {
-    
+
     $query = doquery("SELECT id,name FROM {{table}} ORDER BY id", "spells");
     $page = "<b><u>Edit Spells</u></b><br />Click an spell's name to edit it.<br /><br /><table width=\"50%\">\n";
     $count = 1;
@@ -438,13 +438,13 @@ function spells() {
     if (mysql_num_rows($query) == 0) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">No spells found.</td></tr>\n"; }
     $page .= "</table>";
     admindisplay($page, "Edit Spells");
-    
+
 }
 
 function editspell($id) {
-    
+
     if (isset($_POST["submit"])) {
-        
+
         extract($_POST);
         $errors = 0;
         $errorlist = "";
@@ -453,17 +453,17 @@ function editspell($id) {
         if (!is_numeric($mp)) { $errors++; $errorlist .= "MP must be a number.<br />"; }
         if ($attribute == "") { $errors++; $errorlist .= "Attribute is required.<br />"; }
         if (!is_numeric($attribute)) { $errors++; $errorlist .= "Attribute must be a number.<br />"; }
-        
-        if ($errors == 0) { 
+
+        if ($errors == 0) {
             $query = doquery("UPDATE {{table}} SET name='$name',mp='$mp',attribute='$attribute',type='$type' WHERE id='$id' LIMIT 1", "spells");
             admindisplay("Spell updated.","Edit Spells");
         } else {
             admindisplay("<b>Errors:</b><br /><div style=\"color:red;\">$errorlist</div><br />Please go back and try again.", "Edit Spells");
-        }        
-        
-    }   
-        
-    
+        }
+
+    }
+
+
     $query = doquery("SELECT * FROM {{table}} WHERE id='$id' LIMIT 1", "spells");
     $row = mysql_fetch_array($query);
 
@@ -486,43 +486,43 @@ END;
     if ($row["type"] == 3) { $row["type3select"] = "selected=\"selected\" "; } else { $row["type3select"] = ""; }
     if ($row["type"] == 4) { $row["type4select"] = "selected=\"selected\" "; } else { $row["type4select"] = ""; }
     if ($row["type"] == 5) { $row["type5select"] = "selected=\"selected\" "; } else { $row["type5select"] = ""; }
-    
+
     $page = parsetemplate($page, $row);
     admindisplay($page, "Edit Spells");
-    
+
 }
 
 function levels() {
 
     $query = doquery("SELECT id FROM {{table}} ORDER BY id DESC LIMIT 1", "levels");
     $row = mysql_fetch_array($query);
-    
+
     $options = "";
     for($i=2; $i<$row["id"]; $i++) {
         $options .= "<option value=\"$i\">$i</option>\n";
     }
-    
+
 $page = <<<END
 <b><u>Edit Levels</u></b><br />Select a level number from the dropdown box to edit it.<br /><br />
 <form action="admin.php?do=editlevel" method="post">
 <select name="level">
 $options
-</select> 
+</select>
 <input type="submit" name="go" value="Submit" />
 </form>
 END;
 
     admindisplay($page, "Edit Levels");
-    
+
 }
 
 function editlevel() {
 
     if (!isset($_POST["level"])) { admindisplay("No level to edit.", "Edit Levels"); die(); }
     $id = $_POST["level"];
-    
+
     if (isset($_POST["submit"])) {
-        
+
         extract($_POST);
         $errors = 0;
         $errorlist = "";
@@ -555,7 +555,7 @@ function editlevel() {
         if (!is_numeric($_POST["two_strength"])) { $errors++; $errorlist .= "Class 2 Strength must be a number.<br />"; }
         if (!is_numeric($_POST["two_dexterity"])) { $errors++; $errorlist .= "Class 2 Dexterity must be a number.<br />"; }
         if (!is_numeric($_POST["two_spells"])) { $errors++; $errorlist .= "Class 2 Spells must be a number.<br />"; }
-                
+
         if ($_POST["three_exp"] == "") { $errors++; $errorlist .= "Class 3 Experience is required.<br />"; }
         if ($_POST["three_hp"] == "") { $errors++; $errorlist .= "Class 3 HP is required.<br />"; }
         if ($_POST["three_mp"] == "") { $errors++; $errorlist .= "Class 3 MP is required.<br />"; }
@@ -571,7 +571,7 @@ function editlevel() {
         if (!is_numeric($_POST["three_dexterity"])) { $errors++; $errorlist .= "Class 3 Dexterity must be a number.<br />"; }
         if (!is_numeric($_POST["three_spells"])) { $errors++; $errorlist .= "Class 3 Spells must be a number.<br />"; }
 
-        if ($errors == 0) { 
+        if ($errors == 0) {
 $updatequery = <<<END
 UPDATE {{table}} SET
 1_exp='$one_exp', 1_hp='$one_hp', 1_mp='$one_mp', 1_tp='$one_tp', 1_strength='$one_strength', 1_dexterity='$one_dexterity', 1_spells='$one_spells',
@@ -583,11 +583,11 @@ END;
             admindisplay("Level updated.","Edit Levels");
         } else {
             admindisplay("<b>Errors:</b><br /><div style=\"color:red;\">$errorlist</div><br />Please go back and try again.", "Edit Spells");
-        }        
-        
-    }   
-        
-    
+        }
+
+    }
+
+
     $query = doquery("SELECT * FROM {{table}} WHERE id='$id' LIMIT 1", "levels");
     $row = mysql_fetch_array($query);
     global $controlrow;
@@ -636,14 +636,14 @@ Experience values for each level should be the cumulative total amount of experi
 <input type="submit" name="submit" value="Submit" /> <input type="reset" name="reset" value="Reset" />
 </form>
 END;
-    
+
     $page = parsetemplate($page, $row);
     admindisplay($page, "Edit Levels");
-    
+
 }
 
 function users() {
-    
+
     $query = doquery("SELECT id,username FROM {{table}} ORDER BY id", "users");
     $page = "<b><u>Edit Users</u></b><br />Click a username to edit the account.<br /><br /><table width=\"50%\">\n";
     $count = 1;
@@ -658,9 +658,9 @@ function users() {
 }
 
 function edituser($id) {
-    
+
     if (isset($_POST["submit"])) {
-        
+
         extract($_POST);
         $errors = 0;
         $errorlist = "";
@@ -674,7 +674,7 @@ function edituser($id) {
         if ($charclass == "") { $errors++; $errorlist .= "Character Class is required.<br />"; }
         if ($currentaction == "") { $errors++; $errorlist .= "Current Action is required.<br />"; }
         if ($currentfight == "") { $errors++; $errorlist .= "Current Fight is required.<br />"; }
-        
+
         if ($currentmonster == "") { $errors++; $errorlist .= "Current Monster is required.<br />"; }
         if ($currentmonsterhp == "") { $errors++; $errorlist .= "Current Monster HP is required.<br />"; }
         if ($currentmonstersleep == "") { $errors++; $errorlist .= "Current Monster Sleep is required.<br />"; }
@@ -714,7 +714,7 @@ function edituser($id) {
         if ($dropcode == "") { $errors++; $errorlist .= "Drop Code is required.<br />"; }
         if ($spells == "") { $errors++; $errorlist .= "Spells is required.<br />"; }
         if ($towns == "") { $errors++; $errorlist .= "Towns is required.<br />"; }
-        
+
         if (!is_numeric($authlevel)) { $errors++; $errorlist .= "Auth Level must be a number.<br />"; }
         if (!is_numeric($latitude)) { $errors++; $errorlist .= "Latitude must be a number.<br />"; }
         if (!is_numeric($longitude)) { $errors++; $errorlist .= "Longitude must be a number.<br />"; }
@@ -724,7 +724,7 @@ function edituser($id) {
         if (!is_numeric($currentmonster)) { $errors++; $errorlist .= "Current Monster must be a number.<br />"; }
         if (!is_numeric($currentmonsterhp)) { $errors++; $errorlist .= "Current Monster HP must be a number.<br />"; }
         if (!is_numeric($currentmonstersleep)) { $errors++; $errorlist .= "Current Monster Sleep must be a number.<br />"; }
-        
+
         if (!is_numeric($currentmonsterimmune)) { $errors++; $errorlist .= "Current Monster Immune must be a number.<br />"; }
         if (!is_numeric($currentuberdamage)) { $errors++; $errorlist .= "Current Uber Damage must be a number.<br />"; }
         if (!is_numeric($currentuberdefense)) { $errors++; $errorlist .= "Current Uber Defense must be a number.<br />"; }
@@ -735,7 +735,7 @@ function edituser($id) {
         if (!is_numeric($maxmp)) { $errors++; $errorlist .= "Max MP must be a number.<br />"; }
         if (!is_numeric($maxtp)) { $errors++; $errorlist .= "Max TP must be a number.<br />"; }
         if (!is_numeric($level)) { $errors++; $errorlist .= "Level must be a number.<br />"; }
-        
+
         if (!is_numeric($gold)) { $errors++; $errorlist .= "Gold must be a number.<br />"; }
         if (!is_numeric($experience)) { $errors++; $errorlist .= "Experience must be a number.<br />"; }
         if (!is_numeric($goldbonus)) { $errors++; $errorlist .= "Gold Bonus must be a number.<br />"; }
@@ -746,14 +746,14 @@ function edituser($id) {
         if (!is_numeric($defensepower)) { $errors++; $errorlist .= "Defense Power must be a number.<br />"; }
         if (!is_numeric($weaponid)) { $errors++; $errorlist .= "Weapon ID must be a number.<br />"; }
         if (!is_numeric($armorid)) { $errors++; $errorlist .= "Armor ID must be a number.<br />"; }
-        
+
         if (!is_numeric($shieldid)) { $errors++; $errorlist .= "Shield ID must be a number.<br />"; }
         if (!is_numeric($slot1id)) { $errors++; $errorlist .= "Slot 1 ID  must be a number.<br />"; }
         if (!is_numeric($slot2id)) { $errors++; $errorlist .= "Slot 2 ID must be a number.<br />"; }
         if (!is_numeric($slot3id)) { $errors++; $errorlist .= "Slot 3 ID must be a number.<br />"; }
         if (!is_numeric($dropcode)) { $errors++; $errorlist .= "Drop Code must be a number.<br />"; }
-        
-        if ($errors == 0) { 
+
+        if ($errors == 0) {
 $updatequery = <<<END
 UPDATE {{table}} SET
 email="$email", verify="$verify", charname="$charname", authlevel="$authlevel", latitude="$latitude",
@@ -771,10 +771,10 @@ END;
             admindisplay("User updated.","Edit Users");
         } else {
             admindisplay("<b>Errors:</b><br /><div style=\"color:red;\">$errorlist</div><br />Please go back and try again.", "Edit Users");
-        }        
-        
-    }   
-        
+        }
+
+    }
+
     $query = doquery("SELECT * FROM {{table}} WHERE id='$id' LIMIT 1", "users");
     $row = mysql_fetch_array($query);
     global $controlrow;
@@ -872,30 +872,30 @@ END;
     if ($row["difficulty"] == 1) { $row["diff1select"] = "selected=\"selected\" "; } else { $row["diff1select"] = ""; }
     if ($row["difficulty"] == 2) { $row["diff2select"] = "selected=\"selected\" "; } else { $row["diff2select"] = ""; }
     if ($row["difficulty"] == 3) { $row["diff3select"] = "selected=\"selected\" "; } else { $row["diff3select"] = ""; }
-    
+
     $page = parsetemplate($page, $row);
     admindisplay($page, "Edit Users");
-    
+
 }
 
 function addnews() {
-    
+
     if (isset($_POST["submit"])) {
-        
+
         extract($_POST);
         $errors = 0;
         $errorlist = "";
         if ($content == "") { $errors++; $errorlist .= "Content is required.<br />"; }
-        
-        if ($errors == 0) { 
+
+        if ($errors == 0) {
             $query = doquery("INSERT INTO {{table}} SET id='',postdate=NOW(),content='$content'", "news");
             admindisplay("News post added.","Add News");
         } else {
             admindisplay("<b>Errors:</b><br /><div style=\"color:red;\">$errorlist</div><br />Please go back and try again.", "Add News");
-        }        
-        
-    }   
-        
+        }
+
+    }
+
 $page = <<<END
 <b><u>Add A News Post</u></b><br /><br />
 <form action="admin.php?do=news" method="post">
@@ -904,9 +904,7 @@ Type your post below and then click Submit to add it.<br />
 <input type="submit" name="submit" value="Submit" /> <input type="reset" name="reset" value="Reset" />
 </form>
 END;
-    
+
     admindisplay($page, "Add News");
-    
+
 }
-    
-?>

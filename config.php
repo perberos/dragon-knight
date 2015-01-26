@@ -7,5 +7,3 @@ $dbsettings = Array(
         "name"          => "",              // MySQL database name.
         "prefix"        => "dk",            // Prefix for table names. (Default: dk)
         "secretword"    => "");             // Secret word used when hashing information for cookies.
-
-?>
