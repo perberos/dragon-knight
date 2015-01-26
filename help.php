@@ -170,9 +170,9 @@ of experience and gold you gain from killing it also goes up. So the game is a l
 rewarding. The following are the three difficulty levels and their statistic multiplier, which applies to the monster's
 HP, experience drop, and gold drop.
 <ul>
-<li /><?php echo $controlrow["diff1name"] . ": <b>" . $controlrow["diff1mod"] . "</b>"; ?>
-<li /><?php echo $controlrow["diff2name"] . ": <b>" . $controlrow["diff2mod"] . "</b>"; ?>
-<li /><?php echo $controlrow["diff3name"] . ": <b>" . $controlrow["diff3mod"] . "</b>"; ?>
+<li /><?php echo $controlrow["diff1name"]; ?>: <b><?php echo $controlrow["diff1mod"]; ?></b>
+<li /><?php echo $controlrow["diff2name"]; ?>: <b><?php echo $controlrow["diff2mod"]; ?></b>
+<li /><?php echo $controlrow["diff3name"]; ?>: <b><?php echo $controlrow["diff3mod"]; ?></b>
 </ul>
 [ <a href="#top">Top</a> ]
 
@@ -302,7 +302,7 @@ the heal spell. These may not be used during fights, however - you have to use t
 </ul><br />
 <li />Apologies and lots of happy naked love to anyone I forgot.<br /><br />
 <li />And of course, thanks to <b>you</b> for playing my game!<br /><br />
-<li /><a href="../index.php?do=ninja">NINJA!</a>
+<li /><a href="index.php?do=ninja">NINJA!</a>
 </ul>
 [ <a href="#top">Top</a> ]
 
