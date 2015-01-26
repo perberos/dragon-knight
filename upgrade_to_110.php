@@ -1,6 +1,5 @@
 <?
 
-include('config.php');
 include('lib.php');
 $link = opendb();
 $prefix = $dbsettings["prefix"];

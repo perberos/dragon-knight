@@ -7,8 +7,8 @@ if (isset($_GET["do"])) {
 }
 
 function login() {
+	global $dbsettings;
 
-    include('config.php');
     $link = opendb();
 
     if (isset($_POST["submit"])) {

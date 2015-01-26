@@ -1,8 +1,7 @@
 <?php // cookies.php :: Handles cookies. (Mmm, tasty!)
 
 function checkcookies() {
-
-    include('config.php');
+	global $dbsettings;
 
     $row = false;
 

@@ -1,6 +1,5 @@
 <?php // install.php :: creates/populates database tables on a new installation.
 
-include('config.php');
 include('lib.php');
 $link = opendb();
 $start = getmicrotime();

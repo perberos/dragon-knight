@@ -5,6 +5,7 @@ $numqueries = 0;
 $version = "1.1.11";
 $build = "";
 
+require ('config.php');
 // Handling for servers with magic_quotes turned on.
 // Example from php.net.
 if (get_magic_quotes_gpc()) {
@@ -54,8 +55,7 @@ function getcontrol() {
 }
 
 function opendb() { // Open database connection.
-
-    include('config.php');
+	global $dbsettings;
 
     $link = mysql_connect($dbsettings["server"], $dbsettings["user"], $dbsettings["pass"]) or die(mysql_error());
     mysql_select_db($dbsettings["name"]) or die(mysql_error());
@@ -64,9 +64,8 @@ function opendb() { // Open database connection.
 }
 
 function doquery($query, $table) { // Something of a tiny little database abstraction layer.
+	global $dbsettings, $numqueries;
 
-    include('config.php');
-    global $numqueries;
     $sqlquery = mysql_query(str_replace("{{table}}", $dbsettings["prefix"] . "_" . $table, $query)) or die(mysql_error());
     $numqueries++;
     return $sqlquery;
