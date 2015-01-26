@@ -6,8 +6,8 @@ $link = opendb();
 $userrow = checkcookies();
 if ($userrow == false) { die("Please log in to the <a href=\"../login.php?do=login\">game</a> before using the control panel."); }
 if ($userrow["authlevel"] != 1) { die("You must have administrator privileges to use the control panel."); }
-$controlquery = doquery("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
-$controlrow = mysql_fetch_array($controlquery);
+
+$controlrow = getcontrol ();
 
 if (isset($_GET["do"])) {
     $do = explode(":",$_GET["do"]);

@@ -48,6 +48,11 @@ function html_deep($value) {
 
 }
 
+function getcontrol() {
+	$query = doquery ("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
+	return mysql_fetch_array ($query);
+}
+
 function opendb() { // Open database connection.
 
     include('config.php');
@@ -126,8 +131,7 @@ function admindisplay($content, $title) { // Finalize page and output to browser
 
     global $numqueries, $userrow, $controlrow, $starttime, $version, $build;
     if (!isset($controlrow)) {
-        $controlquery = doquery("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
-        $controlrow = mysql_fetch_array($controlquery);
+        $controlrow = getcontrol ();
     }
 
     $template = gettemplate("admin");
@@ -157,8 +161,7 @@ function display($content, $title, $topnav=true, $leftnav=true, $rightnav=true, 
 
     global $numqueries, $userrow, $controlrow, $version, $build;
     if (!isset($controlrow)) {
-        $controlquery = doquery("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
-        $controlrow = mysql_fetch_array($controlquery);
+        $controlrow = getcontrol ();
     }
     if ($badstart == false) { global $starttime; } else { $starttime = $badstart; }
 

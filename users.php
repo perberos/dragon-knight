@@ -15,8 +15,7 @@ if (isset($_GET["do"])) {
 
 function register() { // Register a new account.
 
-    $controlquery = doquery("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
-    $controlrow = mysql_fetch_array($controlquery);
+    $controlrow = getcontrol ();
 
     if (isset($_POST["submit"])) {
 
@@ -164,8 +163,7 @@ function changepassword() {
 
 function sendpassemail($emailaddress, $password) {
 
-    $controlquery = doquery("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
-    $controlrow = mysql_fetch_array($controlquery);
+    $controlrow = getcontrol ();
     extract($controlrow);
 
 $email = <<<END
@@ -185,8 +183,7 @@ END;
 
 function sendregmail($emailaddress, $vercode) {
 
-    $controlquery = doquery("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
-    $controlrow = mysql_fetch_array($controlquery);
+    $controlrow = getcontrol();
     extract($controlrow);
     $verurl = $gameurl . "?do=verify";
 
@@ -207,8 +204,7 @@ END;
 
 function mymail($to, $title, $body, $from = '') { // thanks to arto dot PLEASE dot DO dot NOT dot SPAM at artoaaltonen dot fi.
 
-    $controlquery = doquery("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
-    $controlrow = mysql_fetch_array($controlquery);
+    $controlrow = getcontrol ();
     extract($controlrow);
 
 

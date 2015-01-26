@@ -5,8 +5,8 @@ include('cookies.php');
 $link = opendb();
 $userrow = checkcookies();
 if ($userrow == false) { display("The forum is for registered players only.", "Forum"); die(); }
-$controlquery = doquery("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
-$controlrow = mysql_fetch_array($controlquery);
+
+$controlrow = getcontrol ();
 
 // Close game.
 if ($controlrow["gameopen"] == 0) { display("The game is currently closed for maintanence. Please check back later.","Game Closed"); die(); }
