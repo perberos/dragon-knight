@@ -21,7 +21,7 @@ function checkcookies() {
         $newcookie = implode(" ",$theuser);
         if ($theuser[3] == 1) { $expiretime = time()+31536000; } else { $expiretime = 0; }
         setcookie ("dkgame", $newcookie, $expiretime, "/", "", 0);
-        $onlinequery = doquery("UPDATE {{table}} SET onlinetime=NOW() WHERE id='". mysql_escape_string ($theuser[0]) .' LIMIT 1", "users");
+        $onlinequery = doquery("UPDATE {{table}} SET onlinetime=NOW() WHERE id='". mysql_escape_string ($theuser[0]) ."' LIMIT 1", "users");
 
     }
 
