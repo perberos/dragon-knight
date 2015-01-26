@@ -108,7 +108,7 @@ while ($itemsrow = mysql_fetch_array($itemsquery)) {
 <table width="60%" style="border: solid 1px black" cellspacing="0" cellpadding="0">
 <tr><td colspan="4" bgcolor="#ffffff"><center><b>Drops</b></center></td></tr>
 <tr><td><b>Name</b></td><td><b>Monster Level</b></td><td><b>Attribute 1</b></td><td><b>Attribute 2</b></td></tr>
-<?
+<?php
 $count = 1;
 $itemsquery = doquery("SELECT * FROM {{table}} ORDER BY id", "drops");
 while ($itemsrow = mysql_fetch_array($itemsquery)) {

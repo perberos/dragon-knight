@@ -77,7 +77,7 @@ a:hover {
 <table width="75%" style="border: solid 1px black" cellspacing="0" cellpadding="0">
 <tr><td colspan="8" bgcolor="#ffffff"><center><b>Monsters</b></center></td></tr>
 <tr><td><b>Name</b></td><td><b>Max HP</b></td><td><b>Max Damage</b></td><td><b>Armor</b></td><td><b>Level</b></td><td><b>Max Exp.</b></td><td><b>Max Gold</b></td><td><b>Immunity</b></td></tr>
-<?
+<?php
 $count = 1;
 $itemsquery = doquery("SELECT * FROM {{table}} ORDER BY id", "monsters");
 while ($itemsrow = mysql_fetch_array($itemsquery)) {
