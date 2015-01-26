@@ -144,14 +144,14 @@ function changepassword() {
 
     if (isset($_POST["submit"])) {
         extract($_POST);
-        $userquery = doquery("SELECT * FROM {{table}} WHERE username='$username' LIMIT 1","users");
+        $userquery = doquery("SELECT * FROM {{table}} WHERE username='". mysql_escape_string ($username). "' LIMIT 1","users");
         if (mysql_num_rows($userquery) != 1) { die("No account with that username."); }
         $userrow = mysql_fetch_array($userquery);
         if ($userrow["password"] != md5($oldpass)) { die("The old password you provided was incorrect."); }
         if (preg_match("/[^A-z0-9_\-]/", $newpass1)==1) { die("New password must be alphanumeric."); } // Thanks to "Carlos Pires" from php.net!
         if ($newpass1 != $newpass2) { die("New passwords don't match."); }
         $realnewpass = md5($newpass1);
-        $updatequery = doquery("UPDATE {{table}} SET password='$realnewpass' WHERE username='$username' LIMIT 1","users");
+        $updatequery = doquery("UPDATE {{table}} SET password='". mysql_escape_string ($realnewpass). "' WHERE username='". mysql_escape_string ($username). "' LIMIT 1","users");
         if (isset($_COOKIE["dkgame"])) { setcookie("dkgame", "", time()-100000, "/", "", 0); }
         display("Your password was changed successfully.<br /><br />You have been logged out of the game to avoid cookie errors.<br /><br />Please <a href=\"login.php?do=login\">log back in</a> to continue playing.","Change Password",false,false,false);
         die();
