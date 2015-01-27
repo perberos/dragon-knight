@@ -75,9 +75,9 @@ function showthread($id, $start) {
 function reply() {
 
     global $userrow;
-	extract($_POST);
-	$query = doquery("INSERT INTO {{table}} SET id='',postdate=NOW(),newpostdate=NOW(),author='".$userrow["charname"]."',parent='$parent',replies='0',title='$title',content='$content'", "forum");
-	$query2 = doquery("UPDATE {{table}} SET newpostdate=NOW(),replies=replies+1 WHERE id='$parent' LIMIT 1", "forum");
+
+	$query = doquery("INSERT INTO {{table}} SET id='',postdate=NOW(),newpostdate=NOW(),author='".mysql_escape_string ($userrow["charname"])."',parent='".mysql_escape_string ($_POST["parent"])."',replies='0',title='".mysql_escape_string ($_POST["title"])."',content='".mysql_escape_string ($_POST["content"])."'", "forum");
+	$query2 = doquery("UPDATE {{table}} SET newpostdate=NOW(),replies=replies+1 WHERE id='".mysql_escape_string ($_POST["parent"])."' LIMIT 1", "forum");
 	header("Location: forum.php?do=thread:$parent:0");
 	die();
 
@@ -88,8 +88,7 @@ function newthread() {
     global $userrow;
 
     if (isset($_POST["submit"])) {
-        extract($_POST);
-        $query = doquery("INSERT INTO {{table}} SET id='',postdate=NOW(),newpostdate=NOW(),author='".$userrow["charname"]."',parent='0',replies='0',title='$title',content='$content'", "forum");
+        $query = doquery("INSERT INTO {{table}} SET id='',postdate=NOW(),newpostdate=NOW(),author='".mysql_escape_string ($userrow["charname"])."',parent='0',replies='0',title='".mysql_escape_string ($_POST["title"])."',content='".mysql_escape_string ($_POST["content"])."'", "forum");
         header("Location: forum.php");
         die();
     }

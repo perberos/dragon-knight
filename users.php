@@ -164,10 +164,9 @@ function changepassword() {
 function sendpassemail($emailaddress, $password) {
 
     $controlrow = getcontrol ();
-    extract($controlrow);
 
-$email = <<<END
-You or someone using your email address submitted a Lost Password application on the $gamename server, located at $gameurl.
+	$email = <<<END
+You or someone using your email address submitted a Lost Password application on the ${controlrow["gamename"]} server, located at ${controlrow["gameurl"]}.
 
 We have issued you a new password so you can log back into the game.
 
@@ -184,20 +183,20 @@ END;
 function sendregmail($emailaddress, $vercode) {
 
     $controlrow = getcontrol();
-    extract($controlrow);
-    $verurl = $gameurl . "?do=verify";
 
-$email = <<<END
-You or someone using your email address recently signed up for an account on the $gamename server, located at $gameurl.
+    $verurl = $controlrow["gameurl"] . "?do=verify";
+
+	$email = <<<END
+You or someone using your email address recently signed up for an account on the ${controlrow["gamename"]} server, located at ${controlrow["gameurl"]}.
 
 This email is sent to verify your registration email. In order to begin using your account, you must verify your email address.
-Please visit the Verification Page ($verurl) and enter the code below to activate your account.
-Verification code: $vercode
+Please visit the Verification Page (${verurl}) and enter the code below to activate your account.
+Verification code: ${vercode}
 
 If you were not the person who signed up for the game, please disregard this message. You will not be emailed again.
 END;
 
-    $status = mymail($emailaddress, "$gamename Account Verification", $email);
+    $status = mymail($emailaddress, $controlrow["gamename"]." Account Verification", $email);
     return $status;
 
 }
@@ -205,8 +204,6 @@ END;
 function mymail($to, $title, $body, $from = '') { // thanks to arto dot PLEASE dot DO dot NOT dot SPAM at artoaaltonen dot fi.
 
     $controlrow = getcontrol ();
-    extract($controlrow);
-
 
   $from = trim($from);
 
@@ -215,7 +212,7 @@ function mymail($to, $title, $body, $from = '') { // thanks to arto dot PLEASE d
   }
 
   $rp    = $controlrow["adminemail"];
-  $org    = '$gameurl';
+  $org    = $controlrow["gameurl"];
   $mailer = 'PHP';
 
   $head  = '';
