@@ -99,7 +99,7 @@ while ($itemsrow = mysql_fetch_array($itemsquery)) {
         if ($special[1] > 0) { $stat = "+" . $special[1]; } else { $stat = $special[1]; }
         $bigspecial = "$attr $stat";
     } else { $bigspecial = "<span class=\"light\">None</span>"; }
-    echo "<tr><td $color width=\"5%\"><img src=\"images/icon_$image.gif\" alt=\"$image\"></td><td $color width=\"30%\">".$itemsrow["name"]."</td><td $color width=\"20%\">".$itemsrow["buycost"]." Gold</td><td $color width=\"20%\">".$itemsrow["attribute"]." $power Power</td><td $color width=\"25%\">$bigspecial</td></tr>\n";
+    echo "<tr><td $color width=\"5%\"><img src=\"images/icon_$image.gif\" alt=\"$image\"></td><td $color width=\"30%\">".$itemsrow["name"]."</td><td $color width=\"20%\">".number_format($itemsrow["buycost"])." Gold</td><td $color width=\"20%\">".$itemsrow["attribute"]." $power Power</td><td $color width=\"25%\">$bigspecial</td></tr>\n";
 }
 ?>
 </table>
