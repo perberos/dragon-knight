@@ -23,4 +23,3 @@ $template = <<<THEVERYENDOFYOU
 </td></tr>
 </table>
 THEVERYENDOFYOU;
-?>

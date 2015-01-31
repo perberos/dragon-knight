@@ -15,4 +15,3 @@ $template = <<<THEVERYENDOFYOU
 </table>
 </form>
 THEVERYENDOFYOU;
-?>

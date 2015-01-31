@@ -87,4 +87,3 @@ winpops=window.open(popurl,"","width=520,height=520,scrollbars")
 </center></body>
 </html>
 THEVERYENDOFYOU;
-?>

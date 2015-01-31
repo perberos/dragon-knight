@@ -36,4 +36,3 @@ Slot 3: {{slot3name}}
 </td></tr>
 </table><br />
 THEVERYENDOFYOU;
-?>

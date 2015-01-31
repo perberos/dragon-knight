@@ -11,4 +11,3 @@ that was emailed to you to unlock your character.</td></tr>
 </table>
 </form>
 THEVERYENDOFYOU;
-?>

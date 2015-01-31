@@ -11,4 +11,3 @@ You are fighting a <b>{{monstername}}</b><br /><br />
 </td></tr>
 </table>
 THEVERYENDOFYOU;
-?>
