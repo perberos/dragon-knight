@@ -57,7 +57,7 @@ function register() { // Register a new account.
                 $verifycode='1';
             }
 
-            $query = doquery("INSERT INTO {{table}} SET id='',regdate=NOW(),verify='".$verifycode."',username='". mysql_escape_string ($_POST["username"]) ."',password='".$password."',email='". mysql_escape_string ($_POST["email1"]) ."',charname='". mysql_escape_string ($_POST["charname"]) ."$charname',charclass='". mysql_escape_string ($_POST["charclass"]) ."',difficulty='". mysql_escape_string ($_POST["difficulty"]) ."'", "users") or die(mysql_error());
+            $query = doquery("INSERT INTO {{table}} SET id='',regdate=NOW(),verify='".$verifycode."',username='". mysql_escape_string ($_POST["username"]) ."',password='".$password."',email='". mysql_escape_string ($_POST["email1"]) ."',charname='". mysql_escape_string ($_POST["charname"]) ."',charclass='". mysql_escape_string ($_POST["charclass"]) ."',difficulty='". mysql_escape_string ($_POST["difficulty"]) ."'", "users") or die(mysql_error());
 
             if ($controlrow["verifyemail"] == 1) {
                 if (sendregmail($email1, $verifycode) == true) {
