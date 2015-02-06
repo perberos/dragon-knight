@@ -143,11 +143,6 @@ function admindisplay($content, $title) { // Finalize page and output to browser
 
     $template = gettemplate("admin");
 
-    // Make page tags for XHTML validation.
-    $xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
-    . "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\">\n"
-    . "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
-
     $finalarray = array(
         "title"=>$title,
         "content"=>$content,
@@ -156,7 +151,6 @@ function admindisplay($content, $title) { // Finalize page and output to browser
         "version"=>$version,
         "build"=>$build);
     $page = parsetemplate($template, $finalarray);
-    $page = $xml . $page;
 
     if ($controlrow["compression"] == 1) { ob_start("ob_gzhandler"); }
     echo $page;
@@ -171,11 +165,6 @@ function display($content, $title, $topnav=true, $leftnav=true, $rightnav=true, 
         $controlrow = getcontrol ();
     }
     if ($badstart == false) { global $starttime; } else { $starttime = $badstart; }
-
-    // Make page tags for XHTML validation.
-    $xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
-    . "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\">\n"
-    . "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
 
     $template = gettemplate("primary");
 
@@ -285,7 +274,6 @@ function display($content, $title, $topnav=true, $leftnav=true, $rightnav=true, 
         "version"=>$version,
         "build"=>$build);
     $page = parsetemplate($template, $finalarray);
-    $page = $xml . $page;
 
     if ($controlrow["compression"] == 1) { ob_start("ob_gzhandler"); }
     echo $page;

@@ -181,13 +181,8 @@ function showchar() {
     }
     if ($userrow["magiclist"] == "") { $userrow["magiclist"] = "None"; }
 
-    // Make page tags for XHTML validation.
-    $xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
-    . "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\">\n"
-    . "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
-
     $charsheet = gettemplate("showchar");
-    $page = $xml . gettemplate("minimal");
+    $page = gettemplate("minimal");
     $array = array("content"=>parsetemplate($charsheet, $userrow), "title"=>"Character Information");
     echo parsetemplate($page, $array);
     die();
@@ -236,12 +231,7 @@ function showmap() {
 
     global $userrow;
 
-    // Make page tags for XHTML validation.
-    $xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
-    . "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\">\n"
-    . "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
-
-    $page = $xml . gettemplate("minimal");
+    $page = gettemplate("minimal");
     $array = array("content"=>"<center><img src=\"images/map.gif\" alt=\"Map\" /></center>", "title"=>"Map");
     echo parsetemplate($page, $array);
     die();
@@ -270,11 +260,7 @@ function babblebox() {
     }
     $babblebox["content"] .= "<center><form action=\"index.php?do=babblebox\" method=\"post\"><input type=\"text\" name=\"babble\" size=\"15\" maxlength=\"120\" /><br /><input type=\"submit\" name=\"submit\" value=\"Babble\" /> <input type=\"reset\" name=\"reset\" value=\"Clear\" /></form></center>";
 
-    // Make page tags for XHTML validation.
-    $xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
-    . "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\">\n"
-    . "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
-    $page = $xml . gettemplate("babblebox");
+    $page = gettemplate("babblebox");
     echo parsetemplate($page, $babblebox);
     die();
 
