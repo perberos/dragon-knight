@@ -527,10 +527,3 @@ function drop() {
     display($page, "Item Drop");
 
 }
-
-
-function dead() {
-
-    $page = "<b>You have died.</b><br /><br />As a consequence, you've lost half of your gold. However, you have been given back a portion of your hit points to continue your journey.<br /><br />You may now continue back to <a href=\"index.php\">town</a>, and we hope you fair better next time.";
-
-}

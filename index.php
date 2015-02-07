@@ -42,7 +42,6 @@ if (isset($_GET["do"])) {
     elseif ($do[0] == "fight") { include('fight.php'); fight(); }
     elseif ($do[0] == "victory") { include('fight.php'); victory(); }
     elseif ($do[0] == "drop") { include('fight.php'); drop(); }
-    elseif ($do[0] == "dead") { include('fight.php'); dead(); }
 
     // Misc functions.
     elseif ($do[0] == "verify") { header("Location: users.php?do=verify"); die(); }
@@ -192,6 +191,9 @@ function showchar() {
 function onlinechar($id) {
 
     global $controlrow;
+
+    $id = round ($id);
+
     $userquery = doquery("SELECT * FROM {{table}} WHERE id='$id' LIMIT 1", "users");
     if (mysql_num_rows($userquery) == 1) { $userrow = mysql_fetch_array($userquery); } else { display("No such user.", "Error"); }
 
