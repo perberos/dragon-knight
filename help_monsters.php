@@ -2,7 +2,7 @@
 include('lib.php');
 $link = opendb();
 $controlrow = getcontrol ();
-ob_start("ob_gzhandler");
+if ($controlrow["compression"] == 1) { ob_start("ob_gzhandler"); }
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
