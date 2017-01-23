@@ -24,21 +24,21 @@ function register() { // Register a new account.
         // Process username.
         if ($_POST["username"] == "") { $errors++; $errorlist .= "Username field is required.<br />"; }
         if (preg_match("/[^A-z0-9_\-]/", $_POST["username"])==1) { $errors++; $errorlist .= "Username must be alphanumeric.<br />"; } // Thanks to "Carlos Pires" from php.net!
-        $usernamequery = doquery("SELECT username FROM {{table}} WHERE username='". mysql_escape_string ($_POST["username"]) ."' LIMIT 1","users");
-        if (mysql_num_rows($usernamequery) > 0) { $errors++; $errorlist .= "Username already taken - unique username required.<br />"; }
+        $usernamequery = doquery("SELECT username FROM {{table}} WHERE username='". escape_string ($_POST["username"]) ."' LIMIT 1","users");
+        if (database_num_rows ($usernamequery) > 0) { $errors++; $errorlist .= "Username already taken - unique username required.<br />"; }
 
         // Process charname.
         if ($_POST["charname"] == "") { $errors++; $errorlist .= "Character Name field is required.<br />"; }
         if (preg_match("/[^A-z0-9_\-]/", $_POST["charname"])==1) { $errors++; $errorlist .= "Character Name must be alphanumeric.<br />"; } // Thanks to "Carlos Pires" from php.net!
-        $characternamequery = doquery("SELECT charname FROM {{table}} WHERE charname='". mysql_escape_string ($_POST["charname"]) ."' LIMIT 1","users");
-        if (mysql_num_rows($characternamequery) > 0) { $errors++; $errorlist .= "Character Name already taken - unique Character Name required.<br />"; }
+        $characternamequery = doquery("SELECT charname FROM {{table}} WHERE charname='". escape_string ($_POST["charname"]) ."' LIMIT 1","users");
+        if (database_num_rows ($characternamequery) > 0) { $errors++; $errorlist .= "Character Name already taken - unique Character Name required.<br />"; }
 
         // Process email address.
         if ($_POST["email1"] == "" || $_POST["email2"] == "") { $errors++; $errorlist .= "Email fields are required.<br />"; }
         if ($_POST["email1"] != $_POST["email2"]) { $errors++; $errorlist .= "Emails don't match.<br />"; }
         if (! is_email($_POST["email1"])) { $errors++; $errorlist .= "Email isn't valid.<br />"; }
-        $emailquery = doquery("SELECT email FROM {{table}} WHERE email='". mysql_escape_string ($_POST["email1"]) ."' LIMIT 1","users");
-        if (mysql_num_rows($emailquery) > 0) { $errors++; $errorlist .= "Email already taken - unique email address required.<br />"; }
+        $emailquery = doquery("SELECT email FROM {{table}} WHERE email='". escape_string ($_POST["email1"]) ."' LIMIT 1","users");
+        if (database_num_rows ($emailquery) > 0) { $errors++; $errorlist .= "Email already taken - unique email address required.<br />"; }
 
         // Process password.
         if (trim($_POST["password1"]) == "") { $errors++; $errorlist .= "Password field is required.<br />"; }
@@ -57,7 +57,7 @@ function register() { // Register a new account.
                 $verifycode='1';
             }
 
-            $query = doquery("INSERT INTO {{table}} SET id='',regdate=NOW(),verify='".$verifycode."',username='". mysql_escape_string ($_POST["username"]) ."',password='".$password."',email='". mysql_escape_string ($_POST["email1"]) ."',charname='". mysql_escape_string ($_POST["charname"]) ."',charclass='". mysql_escape_string ($_POST["charclass"]) ."',difficulty='". mysql_escape_string ($_POST["difficulty"]) ."'", "users") or die(mysql_error());
+            $query = doquery("INSERT INTO {{table}} SET id='',regdate=NOW(),verify='".$verifycode."',username='". escape_string ($_POST["username"]) ."',password='".$password."',email='". escape_string ($_POST["email1"]) ."',charname='". escape_string ($_POST["charname"]) ."',charclass='". escape_string ($_POST["charclass"]) ."',difficulty='". escape_string ($_POST["difficulty"]) ."'", "users") or die(mysql_error());
 
             if ($controlrow["verifyemail"] == 1) {
                 if (sendregmail($email1, $verifycode) == true) {
@@ -94,14 +94,14 @@ function register() { // Register a new account.
 function verify() {
 
     if (isset($_POST["submit"])) {
-        $userquery = doquery("SELECT username,email,verify FROM {{table}} WHERE username='". mysql_escape_string ($_POST["username"]) ."' LIMIT 1","users");
-        if (mysql_num_rows($userquery) != 1) { die("No account with that username."); }
-        $userrow = mysql_fetch_array($userquery);
+        $userquery = doquery("SELECT username,email,verify FROM {{table}} WHERE username='". escape_string ($_POST["username"]) ."' LIMIT 1","users");
+        if (database_num_rows ($userquery) != 1) { die("No account with that username."); }
+        $userrow = database_fetch_array ($userquery);
         if ($userrow["verify"] == 1) { die("Your account is already verified."); }
         if ($userrow["email"] != $_POST["email"]) { die("Incorrect email address."); }
         if ($userrow["verify"] != $_POST["verify"]) { die("Incorrect verification code."); }
         // If we've made it this far, should be safe to update their account.
-        $updatequery = doquery("UPDATE {{table}} SET verify='1' WHERE username='". mysql_escape_string ($_POST["username"]) ."' LIMIT 1","users");
+        $updatequery = doquery("UPDATE {{table}} SET verify='1' WHERE username='". escape_string ($_POST["username"]) ."' LIMIT 1","users");
         display("Your account was verified successfully.<br /><br />You may now continue to the <a href=\"login.php?do=login\">Login Page</a> and start playing the game.<br /><br />Thanks for playing!","Verify Email",false,false,false);
     }
     $page = gettemplate("verify");
@@ -113,14 +113,14 @@ function verify() {
 function lostpassword() {
 
     if (isset($_POST["submit"])) {
-        $userquery = doquery("SELECT email FROM {{table}} WHERE email='". mysql_escape_string ($_POST["email"]). "' LIMIT 1","users");
-        if (mysql_num_rows($userquery) != 1) { die("No account with that email address."); }
+        $userquery = doquery("SELECT email FROM {{table}} WHERE email='". escape_string ($_POST["email"]). "' LIMIT 1","users");
+        if (database_num_rows ($userquery) != 1) { die("No account with that email address."); }
         $newpass = "";
         for ($i=0; $i<8; $i++) {
             $newpass .= chr(rand(65,90));
         }
         $md5newpass = md5($newpass);
-        $updatequery = doquery("UPDATE {{table}} SET password='$md5newpass' WHERE email='". mysql_escape_string ($_POST["email"]). "' LIMIT 1","users");
+        $updatequery = doquery("UPDATE {{table}} SET password='$md5newpass' WHERE email='". escape_string ($_POST["email"]). "' LIMIT 1","users");
         if (sendpassemail($_POST["email"],$newpass) == true) {
             display("Your new password was emailed to the address you provided.<br /><br />Once you receive it, you may <a href=\"login.php?do=login\">Log In</a> and continue playing.<br /><br />Thank you.","Lost Password",false,false,false);
         } else {
@@ -138,14 +138,14 @@ function changepassword() {
 
     if (isset($_POST["submit"])) {
 
-        $userquery = doquery("SELECT * FROM {{table}} WHERE username='". mysql_escape_string ($_POST["username"]) ."' LIMIT 1","users");
-        if (mysql_num_rows($userquery) != 1) { die("No account with that username."); }
-        $userrow = mysql_fetch_array($userquery);
+        $userquery = doquery("SELECT * FROM {{table}} WHERE username='". escape_string ($_POST["username"]) ."' LIMIT 1","users");
+        if (database_num_rows ($userquery) != 1) { die("No account with that username."); }
+        $userrow = database_fetch_array ($userquery);
         if ($userrow["password"] != md5($_POST["oldpass"])) { die("The old password you provided was incorrect."); }
         if (preg_match("/[^A-z0-9_\-]/", $_POST["newpass1"])==1) { die("New password must be alphanumeric."); } // Thanks to "Carlos Pires" from php.net!
         if ($_POST["newpass1"] != $_POST["newpass2"]) { die("New passwords don't match."); }
         $realnewpass = md5($_POST["newpass1"]);
-        $updatequery = doquery("UPDATE {{table}} SET password='". mysql_escape_string ($realnewpass). "' WHERE username='". mysql_escape_string ($_POST["username"]). "' LIMIT 1","users");
+        $updatequery = doquery("UPDATE {{table}} SET password='". escape_string ($realnewpass). "' WHERE username='". escape_string ($_POST["username"]). "' LIMIT 1","users");
         if (isset($_COOKIE["dkgame"])) { setcookie("dkgame", "", time()-100000, "/", "", 0); }
         display("Your password was changed successfully.<br /><br />You have been logged out of the game to avoid cookie errors.<br /><br />Please <a href=\"login.php?do=login\">log back in</a> to continue playing.","Change Password",false,false,false);
         die();

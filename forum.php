@@ -30,10 +30,10 @@ function donothing($start=0) {
     $query = doquery("SELECT * FROM {{table}} WHERE parent='0' ORDER BY newpostdate DESC LIMIT 20", "forum");
     $page = "<table width=\"100%\"><tr><td style=\"padding:1px; background-color:black;\"><table width=\"100%\" style=\"margins:0px;\" cellspacing=\"1\" cellpadding=\"3\"><tr><th colspan=\"3\" style=\"background-color:#dddddd;\"><center><a href=\"forum.php?do=new\">New Thread</a></center></th></tr><tr><th width=\"50%\" style=\"background-color:#dddddd;\">Thread</th><th width=\"10%\" style=\"background-color:#dddddd;\">Replies</th><th style=\"background-color:#dddddd;\">Last Post</th></tr>\n";
     $count = 1;
-    if (mysql_num_rows($query) == 0) {
+    if (database_num_rows ($query) == 0) {
         $page .= "<tr><td style=\"background-color:#ffffff;\" colspan=\"3\"><b>No threads in forum.</b></td></tr>\n";
     } else {
-        while ($row = mysql_fetch_array($query)) {
+        while ($row = database_fetch_array ($query)) {
         	if ($count == 1) {
             	$page .= "<tr><td style=\"background-color:#ffffff;\"><a href=\"forum.php?do=thread:".$row["id"].":0\">".$row["title"]."</a></td><td style=\"background-color:#ffffff;\">".$row["replies"]."</td><td style=\"background-color:#ffffff;\">".$row["newpostdate"]."</td></tr>\n";
             	$count = 2;
@@ -53,10 +53,10 @@ function showthread($id, $start) {
 
     $query = doquery("SELECT * FROM {{table}} WHERE id='$id' OR parent='$id' ORDER BY id LIMIT $start,15", "forum");
     $query2 = doquery("SELECT title FROM {{table}} WHERE id='$id' LIMIT 1", "forum");
-    $row2 = mysql_fetch_array($query2);
+    $row2 = database_fetch_array ($query2);
     $page = "<table width=\"100%\"><tr><td style=\"padding:1px; background-color:black;\"><table width=\"100%\" style=\"margins:0px;\" cellspacing=\"1\" cellpadding=\"3\"><tr><td colspan=\"2\" style=\"background-color:#dddddd;\"><b><a href=\"forum.php\">Forum</a> :: ".$row2["title"]."</b></td></tr>\n";
     $count = 1;
-    while ($row = mysql_fetch_array($query)) {
+    while ($row = database_fetch_array ($query)) {
         if ($count == 1) {
             $page .= "<tr><td width=\"25%\" style=\"background-color:#ffffff; vertical-align:top;\"><span class=\"small\"><b>".$row["author"]."</b><br /><br />".prettyforumdate($row["postdate"])."</td><td style=\"background-color:#ffffff; vertical-align:top;\">".nl2br($row["content"])."</td></tr>\n";
             $count = 2;
@@ -76,8 +76,8 @@ function reply() {
 
     global $userrow;
 
-	$query = doquery("INSERT INTO {{table}} SET id='',postdate=NOW(),newpostdate=NOW(),author='".mysql_escape_string ($userrow["charname"])."',parent='".mysql_escape_string ($_POST["parent"])."',replies='0',title='".mysql_escape_string ($_POST["title"])."',content='".mysql_escape_string ($_POST["content"])."'", "forum");
-	$query2 = doquery("UPDATE {{table}} SET newpostdate=NOW(),replies=replies+1 WHERE id='".mysql_escape_string ($_POST["parent"])."' LIMIT 1", "forum");
+	$query = doquery("INSERT INTO {{table}} SET id='',postdate=NOW(),newpostdate=NOW(),author='".escape_string ($userrow["charname"])."',parent='".escape_string ($_POST["parent"])."',replies='0',title='".escape_string ($_POST["title"])."',content='".escape_string ($_POST["content"])."'", "forum");
+	$query2 = doquery("UPDATE {{table}} SET newpostdate=NOW(),replies=replies+1 WHERE id='".escape_string ($_POST["parent"])."' LIMIT 1", "forum");
 	header("Location: forum.php?do=thread:$parent:0");
 	die();
 
@@ -88,7 +88,7 @@ function newthread() {
     global $userrow;
 
     if (isset($_POST["submit"])) {
-        $query = doquery("INSERT INTO {{table}} SET id='',postdate=NOW(),newpostdate=NOW(),author='".mysql_escape_string ($userrow["charname"])."',parent='0',replies='0',title='".mysql_escape_string ($_POST["title"])."',content='".mysql_escape_string ($_POST["content"])."'", "forum");
+        $query = doquery("INSERT INTO {{table}} SET id='',postdate=NOW(),newpostdate=NOW(),author='".escape_string ($userrow["charname"])."',parent='0',replies='0',title='".escape_string ($_POST["title"])."',content='".escape_string ($_POST["content"])."'", "forum");
         header("Location: forum.php");
         die();
     }

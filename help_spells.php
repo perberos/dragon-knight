@@ -80,7 +80,7 @@ a:hover {
 <?php
 $count = 1;
 $itemsquery = doquery("SELECT * FROM {{table}} ORDER BY id", "spells");
-while ($itemsrow = mysql_fetch_array($itemsquery)) {
+while ($itemsrow = database_fetch_array ($itemsquery)) {
     if ($count == 1) { $color = "bgcolor=\"#ffffff\""; $count = 2; } else { $color = ""; $count = 1; }
     if ($itemsrow["type"] == 1) { $type = "Heal"; }
     elseif ($itemsrow["type"] == 2) { $type = "Hurt"; }

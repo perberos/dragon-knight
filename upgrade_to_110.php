@@ -62,7 +62,7 @@ unset($query);
 
 $query = mysql_query("SELECT * FROM $users ORDER BY id") or die(mysql_error());
 $errors = 0; $errorlist = "";
-while ($row = mysql_fetch_array($query)) {
+while ($row = database_fetch_array ($query)) {
     $id = $row["id"];
     $oldspells = explode(",",$row["spells"]);
     $newspells = "0,";

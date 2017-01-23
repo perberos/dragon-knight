@@ -123,11 +123,11 @@ function items() {
     $query = doquery("SELECT id,name FROM {{table}} ORDER BY id", "items");
     $page = "<b><u>Edit Items</u></b><br />Click an item's name to edit it.<br /><br /><table width=\"50%\">\n";
     $count = 1;
-    while ($row = mysql_fetch_array($query)) {
+    while ($row = database_fetch_array ($query)) {
         if ($count == 1) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">".$row["id"]."</td><td style=\"background-color: #eeeeee;\"><a href=\"admin.php?do=edititem:".$row["id"]."\">".$row["name"]."</a></td></tr>\n"; $count = 2; }
         else { $page .= "<tr><td width=\"8%\" style=\"background-color: #ffffff;\">".$row["id"]."</td><td style=\"background-color: #ffffff;\"><a href=\"admin.php?do=edititem:".$row["id"]."\">".$row["name"]."</a></td></tr>\n"; $count = 1; }
     }
-    if (mysql_num_rows($query) == 0) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">No items found.</td></tr>\n"; }
+    if (database_num_rows ($query) == 0) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">No items found.</td></tr>\n"; }
     $page .= "</table>";
     admindisplay($page, "Edit Items");
 
@@ -158,7 +158,7 @@ function edititem($id) {
 
 
     $query = doquery("SELECT * FROM {{table}} WHERE id='$id' LIMIT 1", "items");
-    $row = mysql_fetch_array($query);
+    $row = database_fetch_array ($query);
 
 $page = <<<END
 <b><u>Edit Items</u></b><br /><br />
@@ -201,11 +201,11 @@ function drops() {
     $query = doquery("SELECT id,name FROM {{table}} ORDER BY id", "drops");
     $page = "<b><u>Edit Drops</u></b><br />Click an item's name to edit it.<br /><br /><table width=\"50%\">\n";
     $count = 1;
-    while ($row = mysql_fetch_array($query)) {
+    while ($row = database_fetch_array ($query)) {
         if ($count == 1) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">".$row["id"]."</td><td style=\"background-color: #eeeeee;\"><a href=\"admin.php?do=editdrop:".$row["id"]."\">".$row["name"]."</a></td></tr>\n"; $count = 2; }
         else { $page .= "<tr><td width=\"8%\" style=\"background-color: #ffffff;\">".$row["id"]."</td><td style=\"background-color: #ffffff;\"><a href=\"admin.php?do=editdrop:".$row["id"]."\">".$row["name"]."</a></td></tr>\n"; $count = 1; }
     }
-    if (mysql_num_rows($query) == 0) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">No items found.</td></tr>\n"; }
+    if (database_num_rows ($query) == 0) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">No items found.</td></tr>\n"; }
     $page .= "</table>";
     admindisplay($page, "Edit Drops");
 
@@ -235,7 +235,7 @@ function editdrop($id) {
 
 
     $query = doquery("SELECT * FROM {{table}} WHERE id='$id' LIMIT 1", "drops");
-    $row = mysql_fetch_array($query);
+    $row = database_fetch_array ($query);
 
 $page = <<<END
 <b><u>Edit Drops</u></b><br /><br />
@@ -273,11 +273,11 @@ function towns() {
     $query = doquery("SELECT id,name FROM {{table}} ORDER BY id", "towns");
     $page = "<b><u>Edit Towns</u></b><br />Click an town's name to edit it.<br /><br /><table width=\"50%\">\n";
     $count = 1;
-    while ($row = mysql_fetch_array($query)) {
+    while ($row = database_fetch_array ($query)) {
         if ($count == 1) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">".$row["id"]."</td><td style=\"background-color: #eeeeee;\"><a href=\"admin.php?do=edittown:".$row["id"]."\">".$row["name"]."</a></td></tr>\n"; $count = 2; }
         else { $page .= "<tr><td width=\"8%\" style=\"background-color: #ffffff;\">".$row["id"]."</td><td style=\"background-color: #ffffff;\"><a href=\"admin.php?do=edittown:".$row["id"]."\">".$row["name"]."</a></td></tr>\n"; $count = 1; }
     }
-    if (mysql_num_rows($query) == 0) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">No towns found.</td></tr>\n"; }
+    if (database_num_rows ($query) == 0) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">No towns found.</td></tr>\n"; }
     $page .= "</table>";
     admindisplay($page, "Edit Towns");
 
@@ -315,7 +315,7 @@ function edittown($id) {
 
 
     $query = doquery("SELECT * FROM {{table}} WHERE id='$id' LIMIT 1", "towns");
-    $row = mysql_fetch_array($query);
+    $row = database_fetch_array ($query);
 
 $page = <<<END
 <b><u>Edit Towns</u></b><br /><br />
@@ -344,7 +344,7 @@ function monsters() {
     global $controlrow;
 
     $statquery = doquery("SELECT * FROM {{table}} ORDER BY level DESC LIMIT 1", "monsters");
-    $statrow = mysql_fetch_array($statquery);
+    $statrow = database_fetch_array ($statquery);
 
     $query = doquery("SELECT id,name FROM {{table}} ORDER BY id", "monsters");
     $page = "<b><u>Edit Monsters</u></b><br />";
@@ -355,11 +355,11 @@ function monsters() {
 
     $page .= "Click an monster's name to edit it.<br /><br /><table width=\"50%\">\n";
     $count = 1;
-    while ($row = mysql_fetch_array($query)) {
+    while ($row = database_fetch_array ($query)) {
         if ($count == 1) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">".$row["id"]."</td><td style=\"background-color: #eeeeee;\"><a href=\"admin.php?do=editmonster:".$row["id"]."\">".$row["name"]."</a></td></tr>\n"; $count = 2; }
         else { $page .= "<tr><td width=\"8%\" style=\"background-color: #ffffff;\">".$row["id"]."</td><td style=\"background-color: #ffffff;\"><a href=\"admin.php?do=editmonster:".$row["id"]."\">".$row["name"]."</a></td></tr>\n"; $count = 1; }
     }
-    if (mysql_num_rows($query) == 0) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">No towns found.</td></tr>\n"; }
+    if (database_num_rows ($query) == 0) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">No towns found.</td></tr>\n"; }
     $page .= "</table>";
     admindisplay($page, "Edit Monster");
 
@@ -397,7 +397,7 @@ function editmonster($id) {
 
 
     $query = doquery("SELECT * FROM {{table}} WHERE id='$id' LIMIT 1", "monsters");
-    $row = mysql_fetch_array($query);
+    $row = database_fetch_array ($query);
 
 $page = <<<END
 <b><u>Edit Monsters</u></b><br /><br />
@@ -431,11 +431,11 @@ function spells() {
     $query = doquery("SELECT id,name FROM {{table}} ORDER BY id", "spells");
     $page = "<b><u>Edit Spells</u></b><br />Click an spell's name to edit it.<br /><br /><table width=\"50%\">\n";
     $count = 1;
-    while ($row = mysql_fetch_array($query)) {
+    while ($row = database_fetch_array ($query)) {
         if ($count == 1) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">".$row["id"]."</td><td style=\"background-color: #eeeeee;\"><a href=\"admin.php?do=editspell:".$row["id"]."\">".$row["name"]."</a></td></tr>\n"; $count = 2; }
         else { $page .= "<tr><td width=\"8%\" style=\"background-color: #ffffff;\">".$row["id"]."</td><td style=\"background-color: #ffffff;\"><a href=\"admin.php?do=editspell:".$row["id"]."\">".$row["name"]."</a></td></tr>\n"; $count = 1; }
     }
-    if (mysql_num_rows($query) == 0) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">No spells found.</td></tr>\n"; }
+    if (database_num_rows ($query) == 0) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">No spells found.</td></tr>\n"; }
     $page .= "</table>";
     admindisplay($page, "Edit Spells");
 
@@ -465,7 +465,7 @@ function editspell($id) {
 
 
     $query = doquery("SELECT * FROM {{table}} WHERE id='$id' LIMIT 1", "spells");
-    $row = mysql_fetch_array($query);
+    $row = database_fetch_array ($query);
 
 $page = <<<END
 <b><u>Edit Spells</u></b><br /><br />
@@ -495,7 +495,7 @@ END;
 function levels() {
 
     $query = doquery("SELECT id FROM {{table}} ORDER BY id DESC LIMIT 1", "levels");
-    $row = mysql_fetch_array($query);
+    $row = database_fetch_array ($query);
 
     $options = "";
     for($i=2; $i<$row["id"]; $i++) {
@@ -589,7 +589,7 @@ END;
 
 
     $query = doquery("SELECT * FROM {{table}} WHERE id='$id' LIMIT 1", "levels");
-    $row = mysql_fetch_array($query);
+    $row = database_fetch_array ($query);
     global $controlrow;
     $class1name = $controlrow["class1name"];
     $class2name = $controlrow["class2name"];
@@ -647,11 +647,11 @@ function users() {
     $query = doquery("SELECT id,username FROM {{table}} ORDER BY id", "users");
     $page = "<b><u>Edit Users</u></b><br />Click a username to edit the account.<br /><br /><table width=\"50%\">\n";
     $count = 1;
-    while ($row = mysql_fetch_array($query)) {
+    while ($row = database_fetch_array ($query)) {
         if ($count == 1) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">".$row["id"]."</td><td style=\"background-color: #eeeeee;\"><a href=\"admin.php?do=edituser:".$row["id"]."\">".$row["username"]."</a></td></tr>\n"; $count = 2; }
         else { $page .= "<tr><td width=\"8%\" style=\"background-color: #ffffff;\">".$row["id"]."</td><td style=\"background-color: #ffffff;\"><a href=\"admin.php?do=edituser:".$row["id"]."\">".$row["username"]."</a></td></tr>\n"; $count = 1; }
     }
-    if (mysql_num_rows($query) == 0) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">No spells found.</td></tr>\n"; }
+    if (database_num_rows ($query) == 0) { $page .= "<tr><td width=\"8%\" style=\"background-color: #eeeeee;\">No spells found.</td></tr>\n"; }
     $page .= "</table>";
     admindisplay($page, "Edit Users");
 
@@ -776,7 +776,7 @@ END;
     }
 
     $query = doquery("SELECT * FROM {{table}} WHERE id='$id' LIMIT 1", "users");
-    $row = mysql_fetch_array($query);
+    $row = database_fetch_array ($query);
     global $controlrow;
     $diff1name = $controlrow["diff1name"];
     $diff2name = $controlrow["diff2name"];

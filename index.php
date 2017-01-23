@@ -78,13 +78,13 @@ function dotown() { // Spit out the main town page.
     global $userrow, $controlrow, $numqueries;
 
     $townquery = doquery("SELECT * FROM {{table}} WHERE latitude='".$userrow["latitude"]."' AND longitude='".$userrow["longitude"]."' LIMIT 1", "towns");
-    if (mysql_num_rows($townquery) == 0) { display("There is an error with your user account, or with the town data. Please try again.","Error"); }
-    $townrow = mysql_fetch_array($townquery);
+    if (database_num_rows ($townquery) == 0) { display("There is an error with your user account, or with the town data. Please try again.","Error"); }
+    $townrow = database_fetch_array ($townquery);
 
     // News box. Grab latest news entry and display it. Something a little more graceful coming soon maybe.
     if ($controlrow["shownews"] == 1) {
         $newsquery = doquery("SELECT * FROM {{table}} ORDER BY id DESC LIMIT 1", "news");
-        $newsrow = mysql_fetch_array($newsquery);
+        $newsrow = database_fetch_array ($newsquery);
         $townrow["news"] = "<table width=\"95%\"><tr><td class=\"title\">Latest News</td></tr><tr><td>\n";
         $townrow["news"] .= "<span class=\"light\">[".prettydate($newsrow["postdate"])."]</span><br />".nl2br($newsrow["content"]);
         $townrow["news"] .= "</td></tr></table>\n";
@@ -94,8 +94,8 @@ function dotown() { // Spit out the main town page.
     if ($controlrow["showonline"] == 1) {
         $onlinequery = doquery("SELECT * FROM {{table}} WHERE UNIX_TIMESTAMP(onlinetime) >= '".(time()-600)."' ORDER BY charname", "users");
         $townrow["whosonline"] = "<table width=\"95%\"><tr><td class=\"title\">Who's Online</td></tr><tr><td>\n";
-        $townrow["whosonline"] .= "There are <b>" . mysql_num_rows($onlinequery) . "</b> user(s) online within the last 10 minutes: ";
-        while ($onlinerow = mysql_fetch_array($onlinequery)) { $townrow["whosonline"] .= "<a href=\"index.php?do=onlinechar:".$onlinerow["id"]."\">".$onlinerow["charname"]."</a>" . ", "; }
+        $townrow["whosonline"] .= "There are <b>" . database_num_rows ($onlinequery) . "</b> user(s) online within the last 10 minutes: ";
+        while ($onlinerow = database_fetch_array ($onlinequery)) { $townrow["whosonline"] .= "<a href=\"index.php?do=onlinechar:".$onlinerow["id"]."\">".$onlinerow["charname"]."</a>" . ", "; }
         $townrow["whosonline"] = rtrim($townrow["whosonline"], ", ");
         $townrow["whosonline"] .= "</td></tr></table>\n";
     } else { $townrow["whosonline"] = ""; }
@@ -155,7 +155,7 @@ function showchar() {
     } else { $userrow["plusgold"] = ""; }
 
     $levelquery = doquery("SELECT ". $userrow["charclass"]."_exp FROM {{table}} WHERE id='".($userrow["level"]+1)."' LIMIT 1", "levels");
-    $levelrow = mysql_fetch_array($levelquery);
+    $levelrow = database_fetch_array ($levelquery);
     if ($userrow["level"] < 99) { $userrow["nextlevel"] = number_format($levelrow[$userrow["charclass"]."_exp"]); } else { $userrow["nextlevel"] = "<span class=\"light\">None</span>"; }
 
     if ($userrow["charclass"] == 1) { $userrow["charclass"] = $controlrow["class1name"]; }
@@ -169,7 +169,7 @@ function showchar() {
     $spellquery = doquery("SELECT id,name FROM {{table}}","spells");
     $userspells = explode(",",$userrow["spells"]);
     $userrow["magiclist"] = "";
-    while ($spellrow = mysql_fetch_array($spellquery)) {
+    while ($spellrow = database_fetch_array ($spellquery)) {
         $spell = false;
         foreach($userspells as $a => $b) {
             if ($b == $spellrow["id"]) { $spell = true; }
@@ -195,7 +195,7 @@ function onlinechar($id) {
     $id = round ($id);
 
     $userquery = doquery("SELECT * FROM {{table}} WHERE id='$id' LIMIT 1", "users");
-    if (mysql_num_rows($userquery) == 1) { $userrow = mysql_fetch_array($userquery); } else { display("No such user.", "Error"); }
+    if (database_num_rows($userquery) == 1) { $userrow = database_fetch_array ($userquery); } else { display("No such user.", "Error"); }
 
     // Format various userrow stuffs.
     $userrow["experience"] = number_format($userrow["experience"]);
@@ -212,7 +212,7 @@ function onlinechar($id) {
     } else { $userrow["plusgold"] = ""; }
 
     $levelquery = doquery("SELECT ". $userrow["charclass"]."_exp FROM {{table}} WHERE id='".($userrow["level"]+1)."' LIMIT 1", "levels");
-    $levelrow = mysql_fetch_array($levelquery);
+    $levelrow = database_fetch_array ($levelquery);
     $userrow["nextlevel"] = number_format($levelrow[$userrow["charclass"]."_exp"]);
 
     if ($userrow["charclass"] == 1) { $userrow["charclass"] = $controlrow["class1name"]; }
@@ -255,7 +255,7 @@ function babblebox() {
     $babblebox = array("content"=>"");
     $bg = 1;
     $babblequery = doquery("SELECT * FROM {{table}} ORDER BY id DESC LIMIT 20", "babble");
-    while ($babblerow = mysql_fetch_array($babblequery)) {
+    while ($babblerow = database_fetch_array ($babblequery)) {
         if ($bg == 1) { $new = "<div style=\"width:98%; background-color:#eeeeee;\">[<b>".$babblerow["author"]."</b>] ".$babblerow["babble"]."</div>\n"; $bg = 2; }
         else { $new = "<div style=\"width:98%; background-color:#ffffff;\">[<b>".$babblerow["author"]."</b>] ".stripslashes($babblerow["babble"])."</div>\n"; $bg = 1; }
         $babblebox["content"] = $new . $babblebox["content"];

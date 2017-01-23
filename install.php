@@ -15,11 +15,13 @@ if (isset($_GET["page"])) {
 
 // Thanks to Predrag Supurovic from php.net for this function!
 function dobatch ($p_query) {
+	global $link;
+
   $query_split = preg_split ("/[;]+/", $p_query);
   foreach ($query_split as $command_line) {
    $command_line = trim($command_line);
    if ($command_line != '') {
-     $query_result = mysql_query($command_line);
+     $query_result = database_query ($link, $command_line);
      if ($query_result == 0) {
        break;
      };
@@ -744,6 +746,7 @@ die();
 }
 
 function fourth() { // Final page: insert new user row, congratulate the person on a job well done.
+	global $link;
 
     if (!isset($_POST['username'])) { die("Username is required."); }
     if (!isset($_POST['password1'])) { die("Password is required."); }
@@ -757,7 +760,7 @@ function fourth() { // Final page: insert new user row, congratulate the person 
 
     global $dbsettings;
     $users = $dbsettings["prefix"] . "_users";
-    $query = mysql_query("INSERT INTO $users SET id='1',username='".mysql_escape_string ($_POST["username"]) ."',password='".mysql_escape_string ($password) ."',email='".mysql_escape_string ($_POST["email1"]) ."',verify='1',charname='".mysql_escape_string ($_POST["charname"]) ."',charclass='".mysql_escape_string ($_POST["charclass"]) ."',regdate=NOW(),onlinetime=NOW(),authlevel='1'") or die(mysql_error());
+    $query = database_query ($link, "INSERT INTO $users SET id='1',username='".escape_string ($_POST["username"]) ."',password='".escape_string ($password) ."',email='".escape_string ($_POST["email1"]) ."',verify='1',charname='".database_escape_string ($link, $_POST["charname"]) ."',charclass='".database_escape_string ($link, $_POST["charclass"]) ."',regdate=NOW(),onlinetime=NOW(),authlevel='1'") or die(database_error ($link));
 
 $page = <<<END
 <html>

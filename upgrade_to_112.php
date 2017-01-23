@@ -330,7 +330,7 @@ $levels["3"] = array(
 $errors = 0; $errorlist = "";
 
 $mainquery = mysql_query("SELECT id,level,charclass,spells FROM $users ORDER BY id");
-while ($mainrow = mysql_fetch_array($mainquery)) {
+while ($mainrow = database_fetch_array ($mainquery)) {
     $level = $mainrow["level"];
     $charclass = $mainrow["charclass"];
     $newspell = $levels[$charclass][$level];

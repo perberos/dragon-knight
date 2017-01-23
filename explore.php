@@ -14,8 +14,8 @@ function move() {
     if (isset($_POST["west"])) { $longitude--; if ($longitude < ($controlrow["gamesize"]*-1)) { $longitude = ($controlrow["gamesize"]*-1); } }
 
     $townquery = doquery("SELECT id FROM {{table}} WHERE latitude='$latitude' AND longitude='$longitude' LIMIT 1", "towns");
-    if (mysql_num_rows($townquery) > 0) {
-        $townrow = mysql_fetch_array($townquery);
+    if (database_num_rows ($townquery) > 0) {
+        $townrow = database_fetch_array ($townquery);
         include('towns.php');
         travelto($townrow["id"], false);
         die();

@@ -6,7 +6,7 @@ function healspells($id) {
 
     $userspells = explode(",",$userrow["spells"]);
     $spellquery = doquery("SELECT * FROM {{table}} WHERE id='$id' LIMIT 1", "spells");
-    $spellrow = mysql_fetch_array($spellquery);
+    $spellrow = database_fetch_array ($spellquery);
 
     // All the various ways to error out.
     $spell = false;

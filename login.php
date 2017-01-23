@@ -14,9 +14,9 @@ function login() {
 
 	if (isset($_POST["submit"])) {
 
-		$query = doquery("SELECT * FROM {{table}} WHERE username='". mysql_escape_string ($_POST["username"]) ."' AND password='".md5($_POST["password"])."' LIMIT 1", "users");
-		if (mysql_num_rows($query) != 1) { die("Invalid username or password. Please go back and try again."); }
-		$row = mysql_fetch_array($query);
+		$query = doquery("SELECT * FROM {{table}} WHERE username='". escape_string ($_POST["username"]) ."' AND password='".md5($_POST["password"])."' LIMIT 1", "users");
+		if (database_num_rows ($query) != 1) { die("Invalid username or password. Please go back and try again."); }
+		$row = database_fetch_array ($query);
 		if (isset($_POST["rememberme"])) { $expiretime = time()+31536000; $rememberme = 1; } else { $expiretime = 0; $rememberme = 0; }
 		$cookie = $row["id"] . " " . $row["username"] . " " . md5($row["password"] . "--" . $dbsettings["secretword"]) . " " . $rememberme;
 		setcookie("dkgame", $cookie, $expiretime, "/", "", 0);

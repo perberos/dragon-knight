@@ -1,10 +1,13 @@
 <?php // lib.php :: Common functions used throughout the program.
 
+include "database.php";
+
 $starttime = getmicrotime();
 $numqueries = 0;
 $version = "1.1.11";
 $build = "";
 $controlrow = null;
+$link = null;
 
 require ('config.php');
 // Handling for servers with magic_quotes turned on.
@@ -56,28 +59,31 @@ function getcontrol() {
 	if (!$controlrow)
 	{
 		$query = doquery ("SELECT * FROM {{table}} WHERE id='1' LIMIT 1", "control");
-		$controlrow = mysql_fetch_array ($query);
+		$controlrow = database_fetch_array ($query);
 	}
 
 	return $controlrow;
 }
 
 function opendb() { // Open database connection.
-	global $dbsettings;
+	global $dbsettings, $link;
 
-    $link = mysql_connect($dbsettings["server"], $dbsettings["user"], $dbsettings["pass"]) or die(mysql_error());
-    mysql_select_db($dbsettings["name"]) or die(mysql_error());
+    $link = database_connect ($dbsettings["server"], $dbsettings["user"], $dbsettings["pass"], $dbsettings["name"]) or die (database_error ($link));
+
     return $link;
-
 }
 
 function doquery($query, $table) { // Something of a tiny little database abstraction layer.
-	global $dbsettings, $numqueries;
+	global $dbsettings, $numqueries, $link;
 
-    $sqlquery = mysql_query(str_replace("{{table}}", $dbsettings["prefix"] . "_" . $table, $query)) or die(mysql_error());
+	$sqlquery = database_query ($link, str_replace ("{{table}}", $dbsettings["prefix"] . "_" . $table, $query)) or die (database_error ($link));
     $numqueries++;
     return $sqlquery;
+}
 
+function escape_string ($string) {
+	global $link;
+	return database_escape_string ($link, $string);
 }
 
 function gettemplate($templatename) { // SQL query for the template.
@@ -181,12 +187,12 @@ function display($content, $title, $topnav=true, $leftnav=true, $rightnav=true, 
         // Get userrow again, in case something has been updated.
         $userquery = doquery("SELECT * FROM {{table}} WHERE id='".$userrow["id"]."' LIMIT 1", "users");
         unset($userrow);
-        $userrow = mysql_fetch_array($userquery);
+        $userrow = database_fetch_array ($userquery);
 
         // Current town name.
         if ($userrow["currentaction"] == "In Town") {
             $townquery = doquery("SELECT * FROM {{table}} WHERE latitude='".$userrow["latitude"]."' AND longitude='".$userrow["longitude"]."' LIMIT 1", "towns");
-            $townrow = mysql_fetch_array($townquery);
+            $townrow = database_fetch_array ($townquery);
             $userrow["currenttown"] = "Welcome to <b>".$townrow["name"]."</b>.<br /><br />";
         } else {
             $userrow["currenttown"] = "";
@@ -233,7 +239,7 @@ function display($content, $title, $topnav=true, $leftnav=true, $rightnav=true, 
         $spellquery = doquery("SELECT id,name,type FROM {{table}}","spells");
         $userspells = explode(",",$userrow["spells"]);
         $userrow["magiclist"] = "";
-        while ($spellrow = mysql_fetch_array($spellquery)) {
+        while ($spellrow = database_fetch_array ($spellquery)) {
             $spell = false;
             foreach($userspells as $a => $b) {
                 if ($b == $spellrow["id"] && $spellrow["type"] == 1) { $spell = true; }
@@ -248,7 +254,7 @@ function display($content, $title, $topnav=true, $leftnav=true, $rightnav=true, 
         $townslist = explode(",",$userrow["towns"]);
         $townquery2 = doquery("SELECT * FROM {{table}} ORDER BY id", "towns");
         $userrow["townslist"] = "";
-        while ($townrow2 = mysql_fetch_array($townquery2)) {
+        while ($townrow2 = database_fetch_array ($townquery2)) {
             $town = false;
             foreach($townslist as $a => $b) {
                 if ($b == $townrow2["id"]) { $town = true; }

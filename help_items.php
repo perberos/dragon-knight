@@ -81,7 +81,7 @@ a:hover {
 <?php
 $count = 1;
 $itemsquery = doquery("SELECT * FROM {{table}} ORDER BY id", "items");
-while ($itemsrow = mysql_fetch_array($itemsquery)) {
+while ($itemsrow = database_fetch_array ($itemsquery)) {
     if ($count == 1) { $color = "bgcolor=\"#ffffff\""; $count = 2; } else { $color = ""; $count = 1; }
     if ($itemsrow["type"] == 1) { $image = "weapon"; $power = "Attack"; } elseif ($itemsrow["type"] == 2) { $image = "armor"; $power = "Defense"; } else { $image = "shield"; $power = "Defense"; }
     if ($itemsrow["special"] != "X") {
@@ -111,7 +111,7 @@ while ($itemsrow = mysql_fetch_array($itemsquery)) {
 <?php
 $count = 1;
 $itemsquery = doquery("SELECT * FROM {{table}} ORDER BY id", "drops");
-while ($itemsrow = mysql_fetch_array($itemsquery)) {
+while ($itemsrow = database_fetch_array ($itemsquery)) {
     if ($count == 1) { $color = "bgcolor=\"#ffffff\""; $count = 2; } else { $color = ""; $count = 1; }
     if ($itemsrow["attribute1"] != "X") {
         $special1 = explode(",",$itemsrow["attribute1"]);

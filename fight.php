@@ -10,7 +10,7 @@ function fight() { // One big long function that determines the outcome of the f
     $pagearray["magiclist"] = "";
     $userspells = explode(",",$userrow["spells"]);
     $spellquery = doquery("SELECT id,name FROM {{table}}", "spells");
-    while ($spellrow = mysql_fetch_array($spellquery)) {
+    while ($spellrow = database_fetch_array ($spellquery)) {
         $spell = false;
         foreach ($userspells as $a => $b) {
             if ($b == $spellrow["id"]) { $spell = true; }
@@ -38,7 +38,7 @@ function fight() { // One big long function that determines the outcome of the f
 
         // Pick a monster.
         $monsterquery = doquery("SELECT * FROM {{table}} WHERE level>='$minlevel' AND level<='$maxlevel' ORDER BY RAND() LIMIT 1", "monsters");
-        $monsterrow = mysql_fetch_array($monsterquery);
+        $monsterrow = database_fetch_array ($monsterquery);
         $userrow["currentmonster"] = $monsterrow["id"];
         $userrow["currentmonsterhp"] = rand((($monsterrow["maxhp"]/5)*4),$monsterrow["maxhp"]);
         if ($userrow["difficulty"] == 2) { $userrow["currentmonsterhp"] = ceil($userrow["currentmonsterhp"] * $controlrow["diff2mod"]); }
@@ -56,7 +56,7 @@ function fight() { // One big long function that determines the outcome of the f
 
     // Next, get the monster statistics.
     $monsterquery = doquery("SELECT * FROM {{table}} WHERE id='".$userrow["currentmonster"]."' LIMIT 1", "monsters");
-    $monsterrow = mysql_fetch_array($monsterquery);
+    $monsterrow = database_fetch_array ($monsterquery);
     $pagearray["monstername"] = $monsterrow["name"];
 
     // Do run stuff.
@@ -185,7 +185,7 @@ function fight() { // One big long function that determines the outcome of the f
         if ($pickedspell == 0) { display("You must select a spell first. Please go back and try again.", "Error"); die(); }
 
         $newspellquery = doquery("SELECT * FROM {{table}} WHERE id='$pickedspell' LIMIT 1", "spells");
-        $newspellrow = mysql_fetch_array($newspellquery);
+        $newspellrow = database_fetch_array ($newspellquery);
         $spell = false;
         foreach($userspells as $a => $b) {
             if ($b == $pickedspell) { $spell = true; }
@@ -359,7 +359,7 @@ function victory() {
     if ($userrow["currentfight"] == 0) { header("Location: index.php"); die(); }
 
     $monsterquery = doquery("SELECT * FROM {{table}} WHERE id='".$userrow["currentmonster"]."' LIMIT 1", "monsters");
-    $monsterrow = mysql_fetch_array($monsterquery);
+    $monsterrow = database_fetch_array ($monsterquery);
 
     $exp = rand((($monsterrow["maxexp"]/6)*5),$monsterrow["maxexp"]);
     if ($exp < 1) { $exp = 1; }
@@ -375,7 +375,7 @@ function victory() {
     if ($userrow["gold"] + $gold < 16777215) { $newgold = $userrow["gold"] + $gold; $warngold = ""; } else { $newgold = $userrow["gold"]; $gold = 0; $warngold = "You have maxed out your experience points."; }
 
     $levelquery = doquery("SELECT * FROM {{table}} WHERE id='".($userrow["level"]+1)."' LIMIT 1", "levels");
-    if (mysql_num_rows($levelquery) == 1) { $levelrow = mysql_fetch_array($levelquery); }
+    if (database_num_rows ($levelquery) == 1) { $levelrow = database_fetch_array ($levelquery); }
 
     if ($userrow["level"] < 100) {
         if ($newexp >= $levelrow[$userrow["charclass"]."_exp"]) {
@@ -411,7 +411,7 @@ function victory() {
 
             if (rand(1,30) == 1) {
                 $dropquery = doquery("SELECT * FROM {{table}} WHERE mlevel <= '".$monsterrow["level"]."' ORDER BY RAND() LIMIT 1", "drops");
-                $droprow = mysql_fetch_array($dropquery);
+                $droprow = database_fetch_array ($dropquery);
                 $dropcode = "dropcode='".$droprow["id"]."',";
                 $page .= "This monster has dropped an item. <a href=\"index.php?do=drop\">Click here</a> to reveal and equip the item, or you may also move on and continue <a href=\"index.php\">exploring</a>.";
             } else {
@@ -437,7 +437,7 @@ function drop() {
     if ($userrow["dropcode"] == 0) { header("Location: index.php"); die(); }
 
     $dropquery = doquery("SELECT * FROM {{table}} WHERE id='".$userrow["dropcode"]."' LIMIT 1", "drops");
-    $droprow = mysql_fetch_array($dropquery);
+    $droprow = database_fetch_array ($dropquery);
 
     if (isset($_POST["submit"])) {
 
@@ -448,7 +448,7 @@ function drop() {
         if ($userrow["slot".$slot."id"] != 0) {
 
             $slotquery = doquery("SELECT * FROM {{table}} WHERE id='".$userrow["slot".$slot."id"]."' LIMIT 1", "drops");
-            $slotrow = mysql_fetch_array($slotquery);
+            $slotrow = database_fetch_array ($slotquery);
 
             $old1 = explode(",",$slotrow["attribute1"]);
             if ($slotrow["attribute2"] != "X") { $old2 = explode(",",$slotrow["attribute2"]); } else { $old2 = array(0=>"maxhp",1=>0); }
