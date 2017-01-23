@@ -82,7 +82,7 @@ CREATE TABLE `$babble` (
   `author` varchar(30) NOT NULL default '',
   `babble` varchar(120) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+);
 END;
 if (dobatch($query) == 1) { echo "Babble Box table created.<br />"; } else { echo "Error creating Babble Box table."; }
 unset($query);
@@ -112,7 +112,7 @@ CREATE TABLE `$control` (
   `showbabble` tinyint(3) unsigned NOT NULL default '0',
   `showonline` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+);
 
 END;
 if (dobatch($query) == 1) { echo "Control table created.<br />"; } else { echo "Error creating Control table."; }
@@ -133,7 +133,7 @@ CREATE TABLE `$drops` (
   `attribute1` varchar(30) NOT NULL default '',
   `attribute2` varchar(30) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+);
 END;
 if (dobatch($query) == 1) { echo "Drops table created.<br />"; } else { echo "Error creating Drops table."; }
 unset($query);
@@ -188,7 +188,7 @@ CREATE TABLE `$forum` (
   `title` varchar(100) NOT NULL default '',
   `content` text NOT NULL,
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+);
 END;
 if (dobatch($query) == 1) { echo "Forum table created.<br />"; } else { echo "Error creating Forum table."; }
 unset($query);
@@ -202,7 +202,7 @@ CREATE TABLE `$items` (
   `attribute` smallint(5) unsigned NOT NULL default '0',
   `special` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+);
 END;
 if (dobatch($query) == 1) { echo "Items table created.<br />"; } else { echo "Error creating Items table."; }
 unset($query);
@@ -272,7 +272,7 @@ CREATE TABLE `$levels` (
   `3_dexterity` smallint(5) unsigned NOT NULL default '0',
   `3_spells` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+);
 END;
 if (dobatch($query) == 1) { echo "Levels table created.<br />"; } else { echo "Error creating Levels table."; }
 unset($query);
@@ -396,7 +396,7 @@ CREATE TABLE `$monsters` (
   `maxgold` smallint(5) unsigned NOT NULL default '0',
   `immune` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+);
 END;
 if (dobatch($query) == 1) { echo "Monsters table created.<br />"; } else { echo "Error creating Monsters table."; }
 unset($query);
@@ -565,7 +565,7 @@ CREATE TABLE `$news` (
   `postdate` datetime NOT NULL default '0000-00-00 00:00:00',
   `content` text NOT NULL,
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+);
 END;
 if (dobatch($query) == 1) { echo "News table created.<br />"; } else { echo "Error creating News table."; }
 unset($query);
@@ -584,7 +584,7 @@ CREATE TABLE `$spells` (
   `attribute` smallint(5) unsigned NOT NULL default '0',
   `type` smallint(5) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+);
 END;
 if (dobatch($query) == 1) { echo "Spells table created.<br />"; } else { echo "Error creating Spells table."; }
 unset($query);
@@ -626,7 +626,7 @@ CREATE TABLE `$towns` (
   `travelpoints` smallint(5) unsigned NOT NULL default '0',
   `itemslist` text NOT NULL,
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+);
 END;
 if (dobatch($query) == 1) { echo "Towns table created.<br />"; } else { echo "Error creating Towns table."; }
 unset($query);
@@ -700,7 +700,7 @@ CREATE TABLE `$users` (
   `spells` varchar(50) NOT NULL default '0',
   `towns` varchar(50) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+);
 END;
 if (dobatch($query) == 1) { echo "Users table created.<br />"; } else { echo "Error creating Users table."; }
 unset($query);
